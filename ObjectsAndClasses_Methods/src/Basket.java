@@ -1,3 +1,4 @@
+
 public class Basket {
 
     private static int count = 0;
@@ -5,6 +6,8 @@ public class Basket {
     private int totalPrice = 0;
     private int limit;
     private double totalWeight = 0;
+    private static int totalCostToBasket = 0;
+    private static int totalGoodsToBasket = 0;
 
     public Basket() {
         increaseCount(1);
@@ -22,19 +25,35 @@ public class Basket {
         this.items = this.items + items;
         this.totalPrice = totalPrice;
     }
+    public static void sumTotalCostToBasket(int totalPrice){
+        totalCostToBasket += totalPrice;
+    }
 
-    public static int getCount() {
-        return count;
+    public static void sumTotalGoodsToBasket(int count){
+        totalGoodsToBasket += count;
     }
-    public int getTotalPrice() {
-        return totalPrice;
+
+    public static int averagePriceOfGoodsToBasket(){
+        int result = totalCostToBasket / totalGoodsToBasket;
+        System.out.println("Средняя стоимость товара со всех корзин " + result);
+        return result;
     }
-    public double getTotalWeight(){
-        return totalWeight;
+
+    public static void averagePriceToBasket(){
+        int result = totalCostToBasket / count;
+        System.out.println("Средняя стоимость корзины равна " + result);
     }
 
     public static void increaseCount(int count) {
         Basket.count = Basket.count + count;
+    }
+
+    public static int getTotalCostToBasket() {
+        return totalCostToBasket;
+    }
+
+    public static int getTotalGoodsToBasket() {
+        return totalGoodsToBasket;
     }
 
     public void add(String name, int price) {
@@ -58,12 +77,14 @@ public class Basket {
 
         items = items + "\n" + name + " - " + " кол-во " +
             count + " шт. - " + " цена " + price + " руб. " + " Общий вес в корзине " + totalWeight;
-        totalPrice = totalPrice + count * price;
+        totalPrice = count * price;
     }
 
     public void add(String name, int price, int count, double weight){
         totalWeight = totalWeight + count * weight;
         add(name, price, count);
+        sumTotalCostToBasket(totalPrice);
+        sumTotalGoodsToBasket(count);
     }
 
     public void clear() {

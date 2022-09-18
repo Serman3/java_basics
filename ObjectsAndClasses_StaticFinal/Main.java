@@ -4,9 +4,9 @@ public class Main {
         System.out.println(computer);
         computer.returnWeight();
 
-        Computer computer1 = computer.setProcessor(new Processor(10, 10, "String", 10));
-        System.out.println(computer1);
-        computer1.returnWeight();
+        computer.setProcessor(new Processor(10, 10, "DJD", 10));
+        System.out.println(computer);
+        computer.returnWeight();
 
 
 

@@ -18,24 +18,24 @@ public class Computer {
         this.keyboard = keyboard;
     }
 
-    public Computer setProcessor(Processor processor){
-        return  new Computer(vendor, name, processor, operationallyMemory, storageInformation, screen, keyboard );
+    public void setProcessor(Processor processor){
+        this.processor = processor;
     }
 
-    public Computer setOperationallyMemory(OperationallyMemory operationallyMemory){
-        return  new Computer(vendor, name, processor, operationallyMemory, storageInformation, screen, keyboard );
+    public void setOperationallyMemory(OperationallyMemory operationallyMemory){
+        this.operationallyMemory = operationallyMemory;
     }
 
-    public Computer setStorageInformation(StorageInformation storageInformation){
-        return  new Computer(vendor, name, processor, operationallyMemory, storageInformation, screen, keyboard );
+    public void setStorageInformation(StorageInformation storageInformation){
+        this.storageInformation = storageInformation;
     }
 
-    public Computer setScreen(Screen screen){
-        return  new Computer(vendor, name, processor, operationallyMemory, storageInformation, screen, keyboard );
+    public void setScreen(Screen screen){
+        this.screen = screen;
     }
 
-    public Computer setKeyboard(Keyboard keyboard){
-        return  new Computer(vendor, name, processor, operationallyMemory, storageInformation, screen, keyboard );
+    public void setKeyboard(Keyboard keyboard){
+        this.keyboard = keyboard;
     }
 
     public int returnWeight(){

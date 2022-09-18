@@ -7,18 +7,11 @@ public class Main {
         System.out.println(container.getCount());
 
 
-        for(int i = 0; i <= 65536; i++){
-            char c = (char) i;
-           // System.out.println(i + " - " + c);
-            if (i == 1025){
-                System.out.println(c);
+        for (char ch = 'Ё'; ch <= 'ё'; ch++) {
+            if ((ch > 'Ё' && ch < 'А') || (ch > 'я' && ch < 'ё')) {
+                continue;
             }
-            if (i >= 1040 && i <= 1103){
-                System.out.println(c);
-            }
-            if (i == 1105){
-                System.out.println(c);
-            }
+            System.out.println(ch + " (" + ((int) ch) + ")");
         }
 
         // TODO: ниже напишите код для выполнения задания:

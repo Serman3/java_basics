@@ -18,7 +18,6 @@ public class Parse {
 
     private String FILE_PATH = "";
 
-
     public Map<String, Station> readFile(String path) throws ParseException, FileNotFoundException, org.json.simple.parser.ParseException {
         File doc = new File(path);
         if (doc.isFile()) {
@@ -41,6 +40,23 @@ public class Parse {
     }
 
     public void parseDatesFromJson(File doc) throws org.json.simple.parser.ParseException {
+        /*JSONParser parser = new JSONParser();
+        JSONArray jsonData = (JSONArray) parser.parse(getJsonFile());
+        for (Object it : jsonData) {
+            JSONObject stationJsonObject = (JSONObject) it;
+            String stationName = (String) stationJsonObject.get("station_name");
+            if (!listStations.containsKey(stationName)) {
+                listStations.put(stationName, new Station(stationName));
+            }
+            if (doc.getName().startsWith("dates")) {
+                String date = (String) stationJsonObject.get("dates");
+                listStations.get(stationName).setDate(date);
+            } else if (doc.getName().startsWith("depths")) {
+                String depth = String.valueOf(stationJsonObject.get("depth_meters"));
+                listStations.get(stationName).setDepth(depth);
+            }
+
+        }*/
         JSONParser parser = new JSONParser();
         JSONArray jsonArray = (JSONArray) parser.parse(getJsonFile());
         for(Object ob : jsonArray){
@@ -67,33 +83,26 @@ public class Parse {
                 listStations.get(nameStation2).setDepth(depth2);
             }
         }
-        for(Map.Entry<String, Station> entry : listStations.entrySet()){
-            System.out.println(entry.getKey()+" : "+entry.getValue());
-        }
-        System.out.println(listStations);
     }
 
-    public void parseDatesFromCsv(File doc){
+    public void parseDatesFromCsv(File doc)throws FileNotFoundException{
         String filePath = doc.getAbsolutePath();
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-            for(;;){
-                String line  = bufferedReader.readLine();
-                if(line == null){
-                    break;
-                }
-                String [] result = line.split(",");
-                for(int i = 0; i < result.length; i++){
+            String line = "";
+            String l = reader.readLine(); // Считываем из файла первую не нужную строку
+            while ((line = reader.readLine()) != null) {
+                String[] lines = line.split(",", 2);
+                for (int i = 0; i < lines.length; i++) {
                     if (i % 2 == 0) {
-                        String stationName = result[i];
+                        String stationName = lines[i];
                         if (!listStations.containsKey(stationName)) {
                             listStations.put(stationName, new Station(stationName));
                         }
                         if (doc.getName().startsWith("dates")) {
-                            listStations.get(stationName).setDate(result[++i]);
-                        }
-                        if (doc.getName().startsWith("depth")) {
-                            listStations.get(stationName).setDepth(result[++i]);
+                            listStations.get(stationName).setDate(lines[i+1]);
+                        } else if (doc.getName().startsWith("depth")) {
+                            listStations.get(stationName).setDepth(lines[i+1]);
                         }
                     }
                 }
@@ -101,12 +110,9 @@ public class Parse {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println(listStations);
     }
 
     public String getJsonFile() {
-
         StringBuilder builder = new StringBuilder();
         try {
             List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));

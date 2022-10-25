@@ -10,6 +10,11 @@ public class Station {
         this.name = name;
     }
 
+    public Station(String name, String numberLine) {
+        this.name = name;
+        this.numberLine = numberLine;
+    }
+
     public Station(String name, String lineName, String date, String depth, boolean hasConnection) {
         this.name = name;
         this.lineName = lineName;
@@ -18,10 +23,6 @@ public class Station {
         this.hasConnection = hasConnection;
     }
 
-    public Station(String name, String numberLine) {
-        this.name = name;
-        this.numberLine = numberLine;
-    }
 
     public String getLineName() {
         return lineName;

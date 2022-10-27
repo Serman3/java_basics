@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,9 @@ import java.util.Map;
 public class Parse {
 
     Map<String, Station> listStations = new HashMap<>();
-
     private String FILE_PATH = "";
 
-    public Map<String, Station> readFile(String path) throws ParseException, FileNotFoundException, org.json.simple.parser.ParseException {
+    public Map<String, Station> readFile(String path) throws FileNotFoundException, org.json.simple.parser.ParseException {
         File doc = new File(path);
         if (doc.isFile()) {
             FILE_PATH = doc.getAbsolutePath();
@@ -40,23 +38,6 @@ public class Parse {
     }
 
     public void parseDatesFromJson(File doc) throws org.json.simple.parser.ParseException {
-        /*JSONParser parser = new JSONParser();
-        JSONArray jsonData = (JSONArray) parser.parse(getJsonFile());
-        for (Object it : jsonData) {
-            JSONObject stationJsonObject = (JSONObject) it;
-            String stationName = (String) stationJsonObject.get("station_name");
-            if (!listStations.containsKey(stationName)) {
-                listStations.put(stationName, new Station(stationName));
-            }
-            if (doc.getName().startsWith("dates")) {
-                String date = (String) stationJsonObject.get("dates");
-                listStations.get(stationName).setDate(date);
-            } else if (doc.getName().startsWith("depths")) {
-                String depth = String.valueOf(stationJsonObject.get("depth_meters"));
-                listStations.get(stationName).setDepth(depth);
-            }
-
-        }*/
         JSONParser parser = new JSONParser();
         JSONArray jsonArray = (JSONArray) parser.parse(getJsonFile());
         for(Object ob : jsonArray){
@@ -74,15 +55,23 @@ public class Parse {
                 String dates = (String) jsonObject.get("date");
                 listStations.get(nameStation).setDate(dates);
             }
-            if(doc.getName().startsWith("depth")){
+            if(doc.getName().startsWith("depths-1.json")){
                 String depth = String.valueOf(jsonObject.get("depth"));
-                listStations.get(nameStation).setDepth(depth);
-            }
-            if  (doc.getName().startsWith("depths-3")){
+                if(depth.indexOf(",") != -1){
+                    depth = depth.replaceAll(",","\\.");
+                }
+                double dephDouble = Double.parseDouble(depth);
+                listStations.get(nameStation).setDepth(dephDouble);
+            } if(doc.getName().startsWith("depths-3.json")) {
                 String depth2 = String.valueOf(jsonObject.get("depth_meters"));
-                listStations.get(nameStation2).setDepth(depth2);
+                if(depth2.indexOf(",") != -1){
+                    depth2 = depth2.replaceAll(",","\\.");
+                }
+                double dephDouble2 = Double.parseDouble(depth2);
+                listStations.get(nameStation2).setDepth(dephDouble2);
             }
         }
+
     }
 
     public void parseDatesFromCsv(File doc)throws FileNotFoundException{
@@ -94,17 +83,20 @@ public class Parse {
             while ((line = reader.readLine()) != null) {
                 String[] lines = line.split(",", 2);
                 for (int i = 0; i < lines.length; i++) {
-                    if (i % 2 == 0) {
-                        String stationName = lines[i];
+                        String stationName = lines[0];
                         if (!listStations.containsKey(stationName)) {
                             listStations.put(stationName, new Station(stationName));
                         }
                         if (doc.getName().startsWith("dates")) {
-                            listStations.get(stationName).setDate(lines[i+1]);
+                            listStations.get(stationName).setDate(lines[1]);
                         } else if (doc.getName().startsWith("depth")) {
-                            listStations.get(stationName).setDepth(lines[i+1]);
+                            String depth = lines[1];
+                            if(depth.indexOf(",") != -1){
+                                depth = depth.replaceAll(",","\\.");
+                            }
+                            double depthDouble = Double.parseDouble(depth);
+                            listStations.get(stationName).setDepth(depthDouble);
                         }
-                    }
                 }
             }
         } catch (Exception e) {

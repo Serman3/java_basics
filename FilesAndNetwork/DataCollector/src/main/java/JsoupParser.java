@@ -16,14 +16,12 @@ public class JsoupParser {
     private Map<String, String> connections = new HashMap<>();
 
     public List<Line> linesAndNumber(){
-       // List<String> metroLine = new ArrayList<>();
         try {
             Document document = Jsoup.connect(URL).get();
             Elements line = document.select(".js-metro-line");
             for(Element element : line){
                 lines.add(new Line(element.attr("data-line"), element.text()));
             }
-           // lines.stream().forEach(el -> metroLine.add("\n" + el.attr("data-line") + " " + el.text()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,25 +42,22 @@ public class JsoupParser {
             e.printStackTrace();
         }
         return stationsAndLines;
-        /*List<String> metroStation = new ArrayList<>();
-        try {
-            Document doc = Jsoup.connect(URL).get();
-            Elements line = doc.select(".js-metro-stations");
-            line.stream().forEach(el -> metroStation.add("\n" + el.attr("data-line") + " " + el.text()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return metroStation;*/
     }
 
     public Map<String, String> parseConnection(){
         try {
             Document document = Jsoup.connect(URL).get();
-            Elements elementsConnection = document.getElementsByClass("t-icon-metroln");
+            Elements elementsConnection = document.getElementsByClass("js-metro-stations t-metrostation-list-table");
             for(Element el : elementsConnection){
-                System.out.println(el.text());
+                Elements stations = el.select("p:has(span[title])");
+                for(Element station : stations){
+                    String stationText = station.text();
+                    int index = stationText.lastIndexOf(".");
+                    String stationName = stationText.substring(index + 1).trim();
+                    String connectionsText = station.getElementsByClass("t-icon-metroln").attr("title");
+                    connections.put(stationName, connectionsText);
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

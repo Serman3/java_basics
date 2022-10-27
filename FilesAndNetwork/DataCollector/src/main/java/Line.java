@@ -1,7 +1,11 @@
 public class Line {
 
-    private final String number;
-    private final String name;
+    private  String number;
+    private  String name;
+
+    public Line(String number){
+        this.name = number;
+    }
 
     public Line(String number, String name) {
         this.number = number;

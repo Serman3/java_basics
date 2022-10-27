@@ -1,28 +1,24 @@
 public class Station {
+
     private String numberLine;
     private String name;
     private String lineName;
     private String date;
-    private String depth;
+    private double depth;
     private boolean hasConnection;
+
 
     public Station(String name) {
         this.name = name;
     }
 
-    public Station(String name, String numberLine) {
-        this.name = name;
-        this.numberLine = numberLine;
-    }
-
-    public Station(String name, String lineName, String date, String depth, boolean hasConnection) {
+    public Station(String name, String lineName, String date, double depth, boolean hasConnection) {
         this.name = name;
         this.lineName = lineName;
         this.date = date;
         this.depth = depth;
         this.hasConnection = hasConnection;
     }
-
 
     public String getLineName() {
         return lineName;
@@ -32,7 +28,7 @@ public class Station {
         return date;
     }
 
-    public String getDepth() {
+    public double getDepth() {
         return depth;
     }
 
@@ -64,7 +60,7 @@ public class Station {
         this.date = date;
     }
 
-    public void setDepth(String depth) {
+    public void setDepth(double depth) {
         this.depth = depth;
     }
 

@@ -1,5 +1,12 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
@@ -43,10 +50,21 @@ public class Main {
         }
         removeNull(metroMap);
         String str = GSON.toJson(metroMap);
-        System.out.println(str);
-       /* Map<String, Map<Line, Set<Station>>> metro = metroMSC(metroMap, listLines, mapStationLine);
-        String str = GSON.toJson(metro);
-        System.out.println(str);*/
+        writeJson(str, "src/main/resources/stations.json");
+
+        Map<String, Map<String, Set<String>>> metro = metroMSC(metroMap, mapStationLine);
+
+        Map<String, List<Line>> map = new TreeMap<>();
+        map.put("lines", listLines);
+
+        List<Map> finishList = new ArrayList<>();
+        finishList.add(metro);
+        finishList.add(map);
+
+        String str2 = GSON.toJson(finishList);
+        writeJson(str2, "src/main/resources/map.json");
+
+        readJson();
     }
 
     public static void removeNull(Map<String,Station> metroMap){
@@ -59,26 +77,60 @@ public class Main {
         }
     }
 
-    /*public static Map<String, Map<Line, Set<Station>>> metroMSC(Map<String,Station> metroMap, List<Line> listlines, Map<String, String> mapStationLine){
-        Set<Station> setStation = new HashSet<>();
-        Map<Line, Set<Station>> map = new HashMap<>();
-        Map<String, Map<Line, Set<Station>>> metro = new HashMap<>();
-
+    public static Map<String, Map<String, Set<String>>> metroMSC(Map<String,Station> metroMap, Map<String, String> mapStationLine){
+        Map<String, Set<String>> map = new TreeMap<>();
+        Map<String, Map<String, Set<String>>> metro = new TreeMap<>();
         for(Map.Entry<String, Station> entry : metroMap.entrySet()){
-            for(Map.Entry<String, String> lineStation : mapStationLine.entrySet()) {
-                if(entry.getValue().getNumberLine().equals(lineStation.getValue()) && entry.getValue().getName().equals(lineStation.getKey())){
-                    setStation.add(new Station(entry.getValue().getName(), entry.getValue().getLineName(), entry.getValue().getDate(), entry.getValue().getDepth(), entry.getValue().isHasConnection()));
-                }
-                for (Line line : listlines) {
-                    if (entry.getValue().getLineName().equals(line.getName())) {
-                        map.put(new Line(entry.getValue().getNumberLine()), setStation);
-                        metro.put("Stations", map);
+            for (Map.Entry<String, String> stationLine : mapStationLine.entrySet()){
+                if(entry.getValue().getNumberLine().equals(stationLine.getValue())){
+                    Set<String> setStation = new HashSet<>();
+                    for (Map.Entry<String, String> statLine : mapStationLine.entrySet()){
+                        if(entry.getValue().getNumberLine().equals(statLine.getValue())){
+                            setStation.add(statLine.getKey());
+                        }
                     }
+                    map.put(entry.getValue().getNumberLine(), setStation);
+                    metro.put("Stations", map);
                 }
+
             }
         }
         return metro;
-    }*/
+
+    }
+
+    public static void writeJson(String str, String path){
+        try {
+            PrintWriter writer = new PrintWriter(path);
+            writer.write(str);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void readJson() {
+        StringBuilder builder = new StringBuilder();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/map.json"));
+            lines.forEach(line -> builder.append(line));
+            String s = builder.toString();
+            JSONParser parser = new JSONParser();
+            JSONArray jsonArray = (JSONArray) parser.parse(s);
+            for(Object ob : jsonArray) {
+                JSONObject jsonObject = (JSONObject) ob;
+                JSONObject stations = (JSONObject) jsonObject.get("Stations");
+                for (Object key : stations.keySet()) {
+                    JSONArray line = (JSONArray) stations.get(key);
+                    int size = line.size();
+                    System.out.println("Линия " + key.toString() + ", количество станций равно - "  + size);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

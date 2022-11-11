@@ -5,6 +5,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import java.sql.*;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,12 +19,31 @@ public class Main {
         for(int i = 1; i <= 20; i++) {
             Course course = session.get(Course.class, i);
             System.out.println(course + "\n");
+            System.out.println(course.getTeacher() + "\n");
+            System.out.println(course.getStudents() + "\n");
+            List<Subscription> subscriptionList = course.getSubscriptions();
+            for(Subscription subscription : subscriptionList){
+                System.out.println(course.getId());
+                System.out.println(subscription + "\n");
+            }
+            System.out.println(course.getSubscriptions());
+            Student student = session.get(Student.class, i);
+            List<Course> listCourse = student.getCourses();
+            for(Course course1 : listCourse){
+                System.out.println(course1.getName());
+            }
+            List<Subscription> subscriptionList2 = student.getSubscriptions();
+            for(Subscription subscription : subscriptionList2){
+                System.out.println(student.getId());
+                System.out.println(subscription + "\n");
+            }
         }
+
         sessionFactory.close();
 
         /*String url = "jdbc:mysql://localhost:3306/skillbox";
         String user = "root";
-        String password = "тщлшф5230";
+        String password = "root";
 
         try {
             Connection connection = DriverManager.getConnection(url, user, password);

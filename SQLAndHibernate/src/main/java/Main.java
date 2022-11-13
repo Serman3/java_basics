@@ -1,5 +1,9 @@
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -10,6 +14,37 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+        Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
+        SessionFactory sessionFactory = metadata.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction(); //открываем транзакцию
+
+        CriteriaBuilder builder = session.getCriteriaBuilder(); //строит объекты запросов
+
+        CriteriaQuery<Purchase> query = builder.createQuery(Purchase.class); //возвращает запрос, указывает тип данных
+        Root<Purchase> root = query.from(Purchase.class); //корневой объект, от которого производится обход дерева
+        query.select(root);
+        List<Purchase> purchaseList = session.createQuery(query).getResultList();
+
+        for (Purchase p : purchaseList) {
+            int studentId = p.getStudent().getId();
+            int courseId = p.getCourse().getId();
+            String courseName = p.getCourseName();
+            String studentName = p.getStudentName();
+
+            LinkedPurchaseList linkedPurchaseList = new LinkedPurchaseList();
+            linkedPurchaseList.setId(new LinkedPurchaseListKey(studentId, courseId));
+            linkedPurchaseList.setStudentName(studentName);
+            linkedPurchaseList.setCourseName(courseName);
+            linkedPurchaseList.setPrice(p.getPrice());
+            linkedPurchaseList.setDate(p.getSubscriptionDate());
+            session.saveOrUpdate(linkedPurchaseList);
+        }
+        transaction.commit();
+        session.close();
+        sessionFactory.close();
+/*
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure("hibernate.cfg.xml").build();
         Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
@@ -38,9 +73,8 @@ public class Main {
                 System.out.println(subscription + "\n");
             }
         }
-
         sessionFactory.close();
-
+*/
         /*String url = "jdbc:mysql://localhost:3306/skillbox";
         String user = "root";
         String password = "root";

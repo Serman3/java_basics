@@ -1,7 +1,4 @@
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -21,6 +18,30 @@ public class Purchase {
 
     @Column(name = "subscription_date")
     private Date subscriptionDate;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_name",referencedColumnName = "name",insertable = false, updatable = false,nullable = false)
+    private Student student;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name ="course_name",referencedColumnName = "name",insertable = false, updatable = false,nullable = false)
+    private Course course;
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
     public PurchaseKey getPurchaseKey() {
         return purchaseKey;

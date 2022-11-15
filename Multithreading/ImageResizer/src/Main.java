@@ -1,12 +1,15 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
 
+    private static int newWidth = 300;
+
     public static void main(String[] args) {
-        String srcFolder = "/users/sortedmap/Desktop/src";
-        String dstFolder = "/users/sortedmap/Desktop/dst";
+
+        String srcFolder = "D:\\ФОТО СВАДЬБА\\ФОТО СВАДЬБА\\Дубли";
+        String dstFolder = "C:\\Users\\User\\Desktop\\dst";
 
         File srcDir = new File(srcFolder);
 
@@ -14,38 +17,33 @@ public class Main {
 
         File[] files = srcDir.listFiles();
 
-        try {
-            for (File file : files) {
-                BufferedImage image = ImageIO.read(file);
-                if (image == null) {
-                    continue;
-                }
+            /*int size = files.length / Runtime.getRuntime().availableProcessors();
 
-                int newWidth = 300;
-                int newHeight = (int) Math.round(
-                    image.getHeight() / (image.getWidth() / (double) newWidth)
-                );
-                BufferedImage newImage = new BufferedImage(
-                    newWidth, newHeight, BufferedImage.TYPE_INT_RGB
-                );
+            File[] files1 = new File[size];
+            System.arraycopy(files, 0, files1, 0, files1.length);
+            MyThread thread1 = new MyThread(files1, newWidth, dstFolder, start);
+            thread1.start();
 
-                int widthStep = image.getWidth() / newWidth;
-                int heightStep = image.getHeight() / newHeight;
+            File[] files2 = new File[(files.length / 2) - files1.length];
+            System.arraycopy(files, size, files2, 0, files2.length);
+            MyThread thread2 = new MyThread(files2, newWidth, dstFolder, start);
+            thread2.start();
 
-                for (int x = 0; x < newWidth; x++) {
-                    for (int y = 0; y < newHeight; y++) {
-                        int rgb = image.getRGB(x * widthStep, y * heightStep);
-                        newImage.setRGB(x, y, rgb);
-                    }
-                }
+            File[] files3 = new File[(files.length / 2) - files2.length];
+            System.arraycopy(files, files2.length, files3, 0, files3.length);
+            MyThread thread3 = new MyThread(files3, newWidth, dstFolder, start);
+            thread3.start();
 
-                File newFile = new File(dstFolder + "/" + file.getName());
-                ImageIO.write(newImage, "jpg", newFile);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
-        System.out.println("Duration: " + (System.currentTimeMillis() - start));
+            File[] files4 = new File[(files.length / 2) - files3.length];
+            System.arraycopy(files, files3.length, files4, 0, files4.length);
+            MyThread thread4 = new MyThread(files4, newWidth, dstFolder, start);
+            thread4.start();*/
+
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        executorService.submit(new MyThread(files, newWidth, dstFolder, start));
+        executorService.shutdown();
+
+            System.out.println("Duration: " + (System.currentTimeMillis() - start));
     }
 }

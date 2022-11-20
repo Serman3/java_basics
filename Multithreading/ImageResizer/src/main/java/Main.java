@@ -17,7 +17,7 @@ public class Main {
 
         File[] files = srcDir.listFiles();
 
-            /*int size = files.length / Runtime.getRuntime().availableProcessors();
+           /* int size = files.length / Runtime.getRuntime().availableProcessors();
 
             File[] files1 = new File[size];
             System.arraycopy(files, 0, files1, 0, files1.length);

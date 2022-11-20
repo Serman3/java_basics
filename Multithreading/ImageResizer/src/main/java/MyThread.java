@@ -29,10 +29,9 @@ public class MyThread extends Thread{
 
                 int newHeight = (int) Math.round(image.getHeight() / (image.getWidth() / (double) newWidth));
                 BufferedImage newImage = MyThread.resize(image, newWidth, newHeight);
-
                 File newFile = new File(dstFolder + "/" + file.getName());
                 ImageIO.write(newImage, "jpg", newFile);
-                System.out.println("finish " + Thread.currentThread().getName() + " - " + (System.currentTimeMillis() - start) + " ms" + "\n");
+                System.out.println("finish " + Thread.currentThread().getThreadGroup().getName() + " - " + (System.currentTimeMillis() - start) + " ms" + "\n");
                             }
         } catch (Exception ex) {
             ex.printStackTrace();

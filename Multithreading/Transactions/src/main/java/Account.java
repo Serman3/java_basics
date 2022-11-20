@@ -1,4 +1,4 @@
-public class Account /*implements Comparable<Account>*/{
+public class Account implements Comparable<Account>{
 
     private long money;
     private final String accNumber;
@@ -31,9 +31,9 @@ public class Account /*implements Comparable<Account>*/{
         return isBlocked;
     }
 
-  /*  @Override
+    @Override
     public int compareTo(Account o) {
         return this.getAccNumber().compareTo(o.getAccNumber());
-    }*/
+    }
 }
 

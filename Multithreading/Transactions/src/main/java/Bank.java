@@ -34,11 +34,10 @@ public class Bank {
      * метод isFraud. Если возвращается true, то делается блокировка счетов (как – на ваше
      * усмотрение)
      */
-    public synchronized void transfer(String fromAccountNum, String toAccountNum, long amount) {
-
+    public void transfer(String fromAccountNum, String toAccountNum, long amount) {
         Account fromAccount = accounts.get(fromAccountNum);
         Account toAccount = accounts.get(toAccountNum);
-    /*    Account firstLock, secondLock;
+        Account firstLock, secondLock;
         if (fromAccount.compareTo(toAccount) > 0) {
             firstLock = fromAccount;
             secondLock = toAccount;
@@ -47,11 +46,8 @@ public class Bank {
             firstLock = toAccount;
             secondLock = fromAccount;
         }
-
         synchronized (firstLock) {
             synchronized (secondLock) {
-
-*/
                 if (amount > limit) {
                     if (fromAccount.getMoney() > amount) {
                         toAccount.setMoney(toAccount.getMoney() + amount);
@@ -80,8 +76,8 @@ public class Bank {
                     System.out.println("После перевода " + fromAccount.getAccNumber() + " " + fromAccount.getMoney() +
                             ", сумма перевода " + amount + " на " + toAccount.getAccNumber() + " " + toAccount.getMoney() + "\n");
                 }
-         /*   }
-        }*/
+            }
+        }
     }
 
     /**

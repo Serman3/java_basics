@@ -19,7 +19,6 @@ public class Main {
         System.out.println("FINISH");
 
        /* Set<URL> links = url.getChildUrl();
-
           try {
             writeFile(links);
         } catch (FileNotFoundException e) {

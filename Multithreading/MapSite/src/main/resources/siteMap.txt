@@ -8,6 +8,8 @@ https://skillbox.ru/
 	https://skillbox.ru/media/
 		https://skillbox.ru/media/about-media/
 		https://skillbox.ru/media/design/
+			https://skillbox.ru/media/design/festival-novogo-dizayna-sreda-vybral-pobediteley/
+			https://skillbox.ru/media/design/monotype-prodolzhit-issledovat-vliyanie-shriftov-na-emotsii/
 			https://skillbox.ru/media/design/khudozhnik-sozdal-v-dokhe-detskuyu-ploshchadku-s-miniatyurnymi-versiyami-chetyryekh-gorodskikh-zdani/
 			https://skillbox.ru/media/design/32-kreativshchika-iz-raznykh-stran-sdelali-myachi-k-chempionatu-mira-po-futbolu-fifa-2022/
 			https://skillbox.ru/media/design/agentstvo-adwise-predstavilo-kontsepty-avtomobilnogo-brenda-moskvich/
@@ -22,23 +24,23 @@ https://skillbox.ru/
 			https://skillbox.ru/media/design/v-parke-gorkogo-ustanovyat-dizaynerskie-skvorechniki/
 			https://skillbox.ru/media/design/v-shveytsarii-predstavili-dizayn-novogo-pasporta/
 			https://skillbox.ru/media/design/google-razrabotal-krasivyy-dizayn-dlya-domashnego-marshrutizatora-nest-wifi-pro/
-			https://skillbox.ru/media/design/obyavili-prizyerov-konkursa-world-illustration-awards-2022/
-			https://skillbox.ru/media/design/tsveta-pantone-stanut-platnymi-dlya-polzovateley-produktov-adobe/
+			https://skillbox.ru/media/design/kovorkingi-v-peterburge-10-luchshikh-mest/
+			https://skillbox.ru/media/design/who-is-fashion-designer/
+			https://skillbox.ru/media/design/dizain-prostranstva-v-rossii/
+			https://skillbox.ru/media/design/do-it-tomorrow-book/
 			https://skillbox.ru/media/design/work-with-patterns/
 			https://skillbox.ru/media/design/vakansii-dlya-dizaynerov-november-5/
 			https://skillbox.ru/media/design/figma-parallax/
 			https://skillbox.ru/media/design/color-combos-light-blue/
 			https://skillbox.ru/media/design/7-fonts-history/
 			https://skillbox.ru/media/design/10-pochti-zimnikh-vystavok-v-moskve-i-peterburge/
-			https://skillbox.ru/media/design/font-typography-3/
-			https://skillbox.ru/media/design/interfejs-prostymi-slovami/
-			https://skillbox.ru/media/design/el-lisitskiy-izobretatel-novogo-mira/
 			https://skillbox.ru/media/design/?page=page-2
 			https://skillbox.ru/media/design/?page=page-3
 			https://skillbox.ru/media/design/?page=page-4
 			https://skillbox.ru/media/design/?page=page-5
 			https://skillbox.ru/media/design/?page=page-78
 		https://skillbox.ru/media/code/
+			https://skillbox.ru/media/code/tekhnologicheskiy-forum-slush-annuliroval-pobedu-startapa-izza-svyazey-s-rossiey/
 			https://skillbox.ru/media/code/v-argentine-arestovali-dvukh-rossiyan-kotorye-zanimalis-podderzhkoy-piratskoy-biblioteki/
 			https://skillbox.ru/media/code/klienty-platformy-1s-gotovyat-sudebnye-iski-na-kompaniyu-za-oshibku-v-rabote-sayta/
 			https://skillbox.ru/media/code/apple-planiruet-pereyti-na-chipy-amerikanskogo-proizvodstva/
@@ -57,6 +59,7 @@ https://skillbox.ru/
 			https://skillbox.ru/media/code/v-rossii-zapustili-platyezhnyy-servis-payselection/
 			https://skillbox.ru/media/code/v-rossii-nachnut-testirovanie-gosudarstvennogo-repozitoriya-po-analoga-github/
 			https://skillbox.ru/media/code/v-chrome-i-android-poyavilas-avtorizatsiya-bez-paroley/
+			https://skillbox.ru/media/code/spiski-v-python-chto-eto-takoe-i-kak-s-nimi-rabotat/
 			https://skillbox.ru/media/code/kak-stat-programmistom-ot-stazhyera-do-timlida-s-minimalnymi-izderzhkami-i-ogromnym-kpd/
 			https://skillbox.ru/media/code/zadacha-mozhno-li-predstavit-chislo-stepenyu-troyki/
 			https://skillbox.ru/media/code/vitaliya-ioffe-o-relokeyte-iz-moskvy-chtoby-izrail-prinyal-tebya-nado-prinyat-izrail/
@@ -68,8 +71,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/code/chto-takoe-github-i-kak-im-polzovatsya/
 			https://skillbox.ru/media/code/zadacha-sozdat-ochered-s-pomoshchyu-stekov/
 			https://skillbox.ru/media/code/story-yana-chusovitina/
-			https://skillbox.ru/media/code/kak-udalit-element-iz-spiska-v-python/
-			https://skillbox.ru/media/code/kak-stat-prodaktmenedzherom-plyusy-i-minusy-professii-perekhod-iz-razrabotki-i-navyki/
 			https://skillbox.ru/media/code/?page=page-2
 			https://skillbox.ru/media/code/?page=page-3
 			https://skillbox.ru/media/code/?page=page-4
@@ -95,6 +96,9 @@ https://skillbox.ru/
 			https://skillbox.ru/media/gamedev/glava-xbox-game-studios-mechtaet-ispolzovat-ii-dlya-zameny-qaspetsialistov/
 			https://skillbox.ru/media/gamedev/ubisoft-ofitsialno-anonsirovala-assassins-creed-mirage-posle-utechki-artmaterialov-po-igre/
 			https://skillbox.ru/media/gamedev/chart-steam-predzakaz-destiny-2-lightfall-i-simulyator-gonok-f1-manager-2022/
+			https://skillbox.ru/media/gamedev/kak-nachinayushchemu-khudozhniku-vybrat-napravlenie-v-geymdeve-obyasnyayut-avtory-warface-the-tales-/
+			https://skillbox.ru/media/gamedev/glavnye-igry-dekabrya-ot-the-callisto-protocol-do-need-for-speed-unbound/
+			https://skillbox.ru/media/gamedev/istoriya-razrabotki-mafia-the-city-of-lost-heaven/
 			https://skillbox.ru/media/gamedev/vakansii-v-geymdeve-v-rossii-i-blizhnem-zarubezhe-chetvyertaya-nedelya-noyabrya/
 			https://skillbox.ru/media/gamedev/luchshie-besplatnye-igry-ot-call-of-duty-warzone-20-do-path-of-exile/
 			https://skillbox.ru/media/gamedev/resident-evil-koshmary-i-kontakt-s-inoplanetyaninom-ikumi-nakamura-v-tsitatakh/
@@ -104,9 +108,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/gamedev/vakansii-v-geymdeve-v-rossii-i-blizhnem-zarubezhe-tretya-nedelya-noyabrya/
 			https://skillbox.ru/media/gamedev/kak-podgotovitsya-k-relokatsii-v-sovremennykh-realiyakh/
 			https://skillbox.ru/media/gamedev/vsye-o-the-devil-in-me-zaklyuchitelnom-epizode-pervogo-sezona-the-dark-pictures-anthology/
-			https://skillbox.ru/media/gamedev/spiderman-miles-morales-dlya-pk-syuzhet-detali-geympleya-i-sistemnye-trebovaniya/
-			https://skillbox.ru/media/gamedev/luchshie-sposoby-raboty-s-referensami/
-			https://skillbox.ru/media/gamedev/call-of-duty-warzone-20-novaya-karta-detali-geympleya-i-sistemnye-trebovaniya/
 			https://skillbox.ru/media/gamedev/?page=page-2
 			https://skillbox.ru/media/gamedev/?page=page-3
 			https://skillbox.ru/media/gamedev/?page=page-4
@@ -133,6 +134,7 @@ https://skillbox.ru/
 			https://skillbox.ru/media/business/v-rossii-defitsit-iispetsialistov/
 			https://skillbox.ru/media/business/sber-yandeks-i-vk-konkuriruyut-za-sozdanie-analoga-google-play-i-app-store/
 			https://skillbox.ru/media/business/minfin-dorabotal-zakonoproekt-o-regulirovanii-kriptovalyut/
+			https://skillbox.ru/media/business/kto-takoy-samozanyatyy-i-kak-im-stat/
 			https://skillbox.ru/media/business/nalog-na-professionalnyy-dokhod-vsye-chto-nuzhno-znat-zhelayushchim-na-nyem-rabotat/
 			https://skillbox.ru/media/business/chto-takoe-startapy-i-kak-ikh-zapuskayut/
 			https://skillbox.ru/media/business/kak-otkryt-ip-v-2022-godu-poshagovaya-instruktsiya/
@@ -144,13 +146,14 @@ https://skillbox.ru/
 			https://skillbox.ru/media/business/story-ekaterina-lomova/
 			https://skillbox.ru/media/business/inklyuzivnost-v-biznese-chto-eto-i-zachem-ona-nuzhna/
 			https://skillbox.ru/media/business/variantov-uzhe-prosto-net-gotova-li-rossiya-k-tekhnologicheskoy-blokade/
-			https://skillbox.ru/media/business/test-menya-skoro-sokratyat/
 			https://skillbox.ru/media/business/?page=page-2
 			https://skillbox.ru/media/business/?page=page-3
 			https://skillbox.ru/media/business/?page=page-4
 			https://skillbox.ru/media/business/?page=page-5
 			https://skillbox.ru/media/business/?page=page-13
 		https://skillbox.ru/media/marketing/
+			https://skillbox.ru/media/marketing/11-ezhegodnykh-konkursov-reklamy-marketinga-i-razrabotki-dlya-kompaniy-komand-frilanserov/
+			https://skillbox.ru/media/marketing/doli-google-i-yandeksa-v-poiskovom-trafike-rossii-rezultaty-poslednego-issledovaniya/
 			https://skillbox.ru/media/marketing/v-gruppakh-v-telegram-poyavilis-forumy-obyasnyaem-zachem-oni-nuzhny-i-kak-ikh-nastraivat/
 			https://skillbox.ru/media/marketing/yandeksdirekt-izmenil-strategii-kak-s-nimi-rabotat-v-2022-godu/
 			https://skillbox.ru/media/marketing/na-wildberries-poyavilsya-garantiynyy-vznos-dlya-prodavtsov-registratsiya-stala-platnoy/
@@ -169,7 +172,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/marketing/dzen-vozvrashchaet-rekomendatelnuyu-lentu/
 			https://skillbox.ru/media/marketing/whatsapp-zapustit-soobshchestva-v-messendzhere/
 			https://skillbox.ru/media/marketing/na-ozon-poyavilas-reklama-ot-storonnikh-reklamodateley/
-			https://skillbox.ru/media/marketing/boosty-zayavil-o-chetyryekhkratnom-roste-chto-eto-za-servis-i-stoit-li-na-nego-idti/
 			https://skillbox.ru/media/marketing/kak-adaptirovat-marketing-v-krizis/
 			https://skillbox.ru/media/marketing/chto-takoe-assotsiirovannye-konversii-i-chto-o-nikh-nuzhno-znat-marketologu/
 			https://skillbox.ru/media/marketing/chto-takoe-pozitsionirovanie-brenda-i-kak-s-nim-rabotat-na-primerakh-ikea-dove-i-bmw/
@@ -189,7 +191,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/marketing/?page=page-5
 			https://skillbox.ru/media/marketing/?page=page-39
 		https://skillbox.ru/media/management/
-			https://skillbox.ru/media/management/11-glavnykh-voprosov-o-karere-biznesanalitika-komu-ona-podkhodit-i-kak-startovat/
 			https://skillbox.ru/media/management/skillbox-zapustil-podkast-o-vostrebovannykh-digitalprofessiyakh-kak-on-pomozhet-v-karere/
 			https://skillbox.ru/media/management/kakuyu-pomoshch-mobilizovannym-okazhut-rabotodateli-rezultaty-oprosa/
 			https://skillbox.ru/media/management/vyshlo-postanovlenie-mobilizovannykh-sotrudnikov-nelzya-uvolnyat-chto-delat-kompaniyam/
@@ -210,6 +211,7 @@ https://skillbox.ru/
 			https://skillbox.ru/media/management/sotrudniki-apple-polzuyutsya-smartfonami-na-android-chtoby-tayno-obedinyatsya-v-profsoyuzy/
 			https://skillbox.ru/media/management/tiktok-peremanivaet-k-sebe-moderatorov-sotssetey-meta/
 			https://skillbox.ru/media/management/sber-nazvali-luchshim-rabotodatelem/
+			https://skillbox.ru/media/management/11-glavnykh-voprosov-o-karere-biznesanalitika-komu-ona-podkhodit-i-kak-startovat/
 			https://skillbox.ru/media/management/chto-takoe-rabochiy-kapital-zachem-ego-schitayut-i-pochemu-on-mozhet-byt-otritsatelnym/
 			https://skillbox.ru/media/management/osnovy-upravlencheskogo-uchyeta-dlya-rukovoditeley-kakoy-on-byvaet-i-zachem-on-nuzhen/
 			https://skillbox.ru/media/management/kakie-vidy-pribyli-est-v-biznese-i-chto-o-nikh-nuzhno-znat-kazhdomu-menedzheru-ili-finansistu/
@@ -222,7 +224,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/management/sistemy-nalogooblozheniya-chto-eto-takoe-kakie-oni-est-i-kak-mezhdu-nimi-vybrat/
 			https://skillbox.ru/media/management/chto-takoe-metodika-hadi-i-kak-ona-pomogaet-nepreryvno-razvivat-biznes/
 			https://skillbox.ru/media/management/dresskoda-nedostatochno-chto-takoe-korporativnaya-kultura-i-nuzhna-li-ona-vashey-kompanii/
-			https://skillbox.ru/media/management/chto-takoe-intellektualnaya-sobstvennost-i-pochemu-eye-nuzhno-zashchishchat-vsem-kompaniyam/
 			https://skillbox.ru/media/management/?page=page-2
 			https://skillbox.ru/media/management/?page=page-3
 			https://skillbox.ru/media/management/?page=page-4
@@ -241,13 +242,13 @@ https://skillbox.ru/
 			https://skillbox.ru/media/cinemusic/chto-takoe-kultura-otmeny/
 			https://skillbox.ru/media/cinemusic/luchshie-polnometrazhnye-anime-v-istorii-top16/
 			https://skillbox.ru/media/cinemusic/kak-snyat-reklamnyy-rolik-v-2022-godu/
-			https://skillbox.ru/media/cinemusic/story-aleksandra-alma/
 			https://skillbox.ru/media/cinemusic/?page=page-2
 			https://skillbox.ru/media/cinemusic/?page=page-3
 			https://skillbox.ru/media/cinemusic/?page=page-4
 			https://skillbox.ru/media/cinemusic/?page=page-5
 			https://skillbox.ru/media/cinemusic/?page=page-6
 		https://skillbox.ru/media/growth/
+			https://skillbox.ru/media/growth/story-vladimir-gluhov/
 			https://skillbox.ru/media/growth/talented-child/
 			https://skillbox.ru/media/growth/family-psychotherapy/
 			https://skillbox.ru/media/growth/good-parents/
@@ -267,14 +268,15 @@ https://skillbox.ru/
 			https://skillbox.ru/media/growth/?page=page-5
 			https://skillbox.ru/media/growth/?page=page-11
 		https://skillbox.ru/media/education/
+			https://skillbox.ru/media/education/vuzam-khotyat-dat-preimushchestvennoe-pravo-na-povyshenie-kvalifikatsii-i-perepodgotovku/
+			https://skillbox.ru/media/education/stalo-izvestno-khorosho-li-pedagogi-vladeyut-tsifrovymi-tekhnologiyami/
+			https://skillbox.ru/media/education/prezident-poruchil-sozdat-novyy-reyting-vuzov-i-koechem-dopolnit-shkolnuyu-matematiku/
 			https://skillbox.ru/media/education/poyavilsya-neobychnyy-novyy-reyting-vuzov-ego-gotovili-18-let/
 			https://skillbox.ru/media/education/nazvany-luchshie-rektory-2022-goda/
 			https://skillbox.ru/media/education/pravila-zachisleniya-v-vuzy-snova-khotyat-otkorrektirovat/
 			https://skillbox.ru/media/education/olga-vasileva-prizvala-vernutsya-ot-kompetentnostnoy-podgotovki-pedagogov-k-nravstvennoy/
-			https://skillbox.ru/media/education/prorektor-tyumgu-nazval-tri-marketingovykh-trenda-vazhnykh-dlya-vuzov/
-			https://skillbox.ru/media/education/v-belarusi-khotyat-vvesti-kharakteristiki-vypusknikov-shkol-vazhnye-dlya-postupleniya/
-			https://skillbox.ru/media/education/v-poezdakh-sapsan-nashlos-mesto-dlya-obrazovaniya-passazhirov/
-			https://skillbox.ru/media/education/prinyat-zakon-ob-uchebnoproizvodstvennykh-kompleksakh/
+			https://skillbox.ru/media/education/tsifry-portret-tipichnogo-studenta-proekta-tsifrovye-professii/
+			https://skillbox.ru/media/education/kakie-podkasty-i-diskussii-ob-obrazovanii-vyshli-v-noyabre/
 			https://skillbox.ru/media/education/prichina-neuspevaemosti-obrazovatelnoe-neravenstvo-i-obrazovatelnaya-bednost/
 			https://skillbox.ru/media/education/otsenka-kachestva-obrazovaniya-9-sovetov-ekspertov/
 			https://skillbox.ru/media/education/tsitaty-nedeli-o-nerynochnosti-obrazovaniya-vospitanii-v-magistrature-i-aspiranture/
@@ -284,9 +286,6 @@ https://skillbox.ru/
 			https://skillbox.ru/media/education/7-globalnykh-trendov-i-riskov-razvitiya-edtechtekhnologiy/
 			https://skillbox.ru/media/education/stoit-li-polzovatsya-gotovymi-testami-iz-interneta/
 			https://skillbox.ru/media/education/kak-deystvuyut-prava-na-intellektualnuyu-sobstvennost/
-			https://skillbox.ru/media/education/kak-legalno-ispolzovat-chuzhoy-kontent-v-svoyem-onlaynkurse/
-			https://skillbox.ru/media/education/psikhometrika-chto-eto-takoe-i-zachem-ona-nuzhna-obrazovaniyu/
-			https://skillbox.ru/media/education/4-bedy-marketpleysov-kursov/
 			https://skillbox.ru/media/education/?page=page-2
 			https://skillbox.ru/media/education/?page=page-3
 			https://skillbox.ru/media/education/?page=page-4
@@ -299,6 +298,8 @@ https://skillbox.ru/
 			https://skillbox.ru/media/edtech/?page=page-5
 			https://skillbox.ru/media/edtech/?page=page-7
 		https://skillbox.ru/media/corptrain/
+			https://skillbox.ru/media/corptrain/kak-obuchat-i-razvivat-sotrudnikov-50/
+			https://skillbox.ru/media/corptrain/5-printsipov-dlya-korporativnogo-obucheniya-v-neponyatnykh-novykh-usloviyakh/
 			https://skillbox.ru/media/corptrain/mnenie-eksperta-peddizayn-bespolezen-a-chto-deystvitelno-rabotaet-tak-eto-chellendzh/
 			https://skillbox.ru/media/corptrain/reversivnoe-nastavnichestvo-kak-mladshie-spetsialisty-uchat-starshikh/
 			https://skillbox.ru/media/corptrain/4-prichiny-po-kotorym-korporativnomu-kursu-ne-nuzhno-issledovanie/
@@ -313,13 +314,16 @@ https://skillbox.ru/
 			https://skillbox.ru/media/corptrain/?page=page-4
 			https://skillbox.ru/media/corptrain/?page=page-5
 			https://skillbox.ru/media/corptrain/?page=page-8
-		https://skillbox.ru/media/design/kovorkingi-v-peterburge-10-luchshikh-mest/
-		https://skillbox.ru/media/topic/collections/
-			https://skillbox.ru/media/topic/collections/?page=page-2
-			https://skillbox.ru/media/topic/collections/?page=page-3
-			https://skillbox.ru/media/topic/collections/?page=page-4
-			https://skillbox.ru/media/topic/collections/?page=page-5
-			https://skillbox.ru/media/topic/collections/?page=page-45
+		https://skillbox.ru/media/code/sistemnoe-administrirovanie-otlichiya-ot-devops-skilly-zadachi-greydy-i-stil-raboty/
+		https://skillbox.ru/media/topic/podcast/
+			https://skillbox.ru/media/topic/podcast/?page=page-2
+		https://skillbox.ru/media/design/dizaynerskiy-duet-eneris-collective-sozdal-modulnyy-detskiy-taburet-iz-olivkovykh-kostochek/
+		https://skillbox.ru/media/design/tsvetom-2023-goda-po-versii-pantone-nazvali-viva-magenta-181750/
+		https://skillbox.ru/media/education/zhenskoe-obrazovanie-v-afganistane-obyavleno-chastyu-nezhelatelnoy-inostrannoy-kultury/
+		https://skillbox.ru/media/education/shkolnik-iz-astrakhani-razrabotal-sistemu-uchyeta-poseshchaemosti-zanyatiy/
+		https://skillbox.ru/media/education/issledovateli-vyyasnili-kakie-osobennosti-est-v-profobuchenii-lyudey-starshego-vozrasta/
+		https://skillbox.ru/media/marketing/yandeks-zapustil-novuyu-versiyu-poiska-y2-chto-izmenitsya-v-poiskovykh-algoritmakh/
+		https://skillbox.ru/media/education/uchyenye-schitayut-chto-onlaynigry-mogut-razvivat-gibkie-navyki/
 		https://skillbox.ru/media/education/obyavleny-laureaty-mezhdunarodnogo-konkursa-tekhnologiy-obucheniya/
 		https://skillbox.ru/media/gamedev/v-rossii-zapustili-proekt-dlya-detey-posvyashchyennyy-sozdaniyu-igry-v-roblox/
 		https://skillbox.ru/media/design/studenty-mit-razrabotali-neskolko-kontseptsiy-stula-kotoryy-prosluzhit-150-let/
@@ -333,43 +337,48 @@ https://skillbox.ru/
 		https://skillbox.ru/media/education/stalo-izvestno-skolko-rossiyan-zanyalis-dopolnitelnym-obrazovaniem-v-2022-godu/
 		https://skillbox.ru/media/education/obyavleny-rossiyskie-vuzy-okazyvayushchie-naibolshee-vliyanie-na-obshchestvo/
 		https://skillbox.ru/media/education/gosduma-porekomendovala-pravitelstvu-kak-razvivat-sistemu-vysshego-obrazovaniya/
-		https://skillbox.ru/media/education/vuzam-khotyat-dat-preimushchestvennoe-pravo-na-povyshenie-kvalifikatsii-i-perepodgotovku/
-		https://skillbox.ru/media/design/festival-novogo-dizayna-sreda-vybral-pobediteley/
-		https://skillbox.ru/media/marketing/doli-google-i-yandeksa-v-poiskovom-trafike-rossii-rezultaty-poslednego-issledovaniya/
-		https://skillbox.ru/media/education/stalo-izvestno-khorosho-li-pedagogi-vladeyut-tsifrovymi-tekhnologiyami/
-		https://skillbox.ru/media/education/prezident-poruchil-sozdat-novyy-reyting-vuzov-i-koechem-dopolnit-shkolnuyu-matematiku/
-		https://skillbox.ru/media/design/monotype-prodolzhit-issledovat-vliyanie-shriftov-na-emotsii/
-		https://skillbox.ru/media/code/tekhnologicheskiy-forum-slush-annuliroval-pobedu-startapa-izza-svyazey-s-rossiey/
-		https://skillbox.ru/media/gamedev/glavnye-igry-dekabrya-ot-the-callisto-protocol-do-need-for-speed-unbound/
-		https://skillbox.ru/media/marketing/11-ezhegodnykh-konkursov-reklamy-marketinga-i-razrabotki-dlya-kompaniy-komand-frilanserov/
+		https://skillbox.ru/media/education/kak-rynok-dpo-i-korporativnogo-obucheniya-adaptirovalsya-k-potryaseniyam2022/
 		https://skillbox.ru/media/topic/articles/
 			https://skillbox.ru/media/topic/articles/?page=page-2
 			https://skillbox.ru/media/topic/articles/?page=page-3
 			https://skillbox.ru/media/topic/articles/?page=page-4
 			https://skillbox.ru/media/topic/articles/?page=page-5
 			https://skillbox.ru/media/topic/articles/?page=page-189
-		https://skillbox.ru/media/education/tsifry-portret-tipichnogo-studenta-proekta-tsifrovye-professii/
-		https://skillbox.ru/media/education/kakie-podkasty-i-diskussii-ob-obrazovanii-vyshli-v-noyabre/
-		https://skillbox.ru/media/corptrain/kak-obuchat-i-razvivat-sotrudnikov-50/
-		https://skillbox.ru/media/code/spiski-v-python-chto-eto-takoe-i-kak-s-nimi-rabotat/
-		https://skillbox.ru/media/design/who-is-fashion-designer/
-		https://skillbox.ru/media/growth/story-vladimir-gluhov/
+		https://skillbox.ru/media/code/yazyk_go_chto_pod_kapotom_i_zachem_programmistu_uchit_ego_kak_vtoroy/
+		https://skillbox.ru/media/cinemusic/the-best-movies-about-space/
+		https://skillbox.ru/media/topic/collections/
+			https://skillbox.ru/media/topic/collections/?page=page-2
+			https://skillbox.ru/media/topic/collections/?page=page-3
+			https://skillbox.ru/media/topic/collections/?page=page-4
+			https://skillbox.ru/media/topic/collections/?page=page-5
+			https://skillbox.ru/media/topic/collections/?page=page-45
+		https://skillbox.ru/media/design/typo-trends-2023/
+		https://skillbox.ru/media/gamedev/vsye-o-need-for-speed-unbound-novoy-gonochnoy-igre-ot-avtorov-burnout-i-nfs-hot-pursuit/
+		https://skillbox.ru/media/design/figma-gauss-text/
+		https://skillbox.ru/media/topic/guides/
+			https://skillbox.ru/media/topic/guides/?page=page-2
+			https://skillbox.ru/media/topic/guides/?page=page-3
+			https://skillbox.ru/media/topic/guides/?page=page-4
+			https://skillbox.ru/media/topic/guides/?page=page-5
+			https://skillbox.ru/media/topic/guides/?page=page-31
+		https://skillbox.ru/media/management/kak-sozdat-bazu-dannykh-v-excel-razbiraem-na-primere/
+		https://skillbox.ru/media/gamedev/vsye-o-the-callisto-protocol-novom-kosmicheskom-khorrore-ot-sozdatelya-dead-space/
+		https://skillbox.ru/media/education/kak-sproektirovat-onlaynkurs-na-osnove-dizaynmyshleniya/
+		https://skillbox.ru/media/design/vizualiziruy-eto-otryvok-iz-knigi-kamera-negativ-otpechatok/
+		https://skillbox.ru/media/education/byloe-kak-student-rektorom-stal-da-ne-spravilsya/
 		https://skillbox.ru/media/topic/history/
 			https://skillbox.ru/media/topic/history/?page=page-2
 			https://skillbox.ru/media/topic/history/?page=page-3
 			https://skillbox.ru/media/topic/history/?page=page-4
 			https://skillbox.ru/media/topic/history/?page=page-5
 			https://skillbox.ru/media/topic/history/?page=page-24
-		https://skillbox.ru/media/corptrain/5-printsipov-dlya-korporativnogo-obucheniya-v-neponyatnykh-novykh-usloviyakh/
-		https://skillbox.ru/media/design/dizain-prostranstva-v-rossii/
-		https://skillbox.ru/media/business/kto-takoy-samozanyatyy-i-kak-im-stat/
-		https://skillbox.ru/media/design/do-it-tomorrow-book/
-		https://skillbox.ru/media/gamedev/istoriya-razrabotki-mafia-the-city-of-lost-heaven/
+		https://skillbox.ru/media/design/behance-november-two/
+		https://skillbox.ru/media/business/patentnaya-sistema-nalogooblozheniya-komu-podoydyet-kak-pereyti-skolko-stoit-patent/
 		https://skillbox.ru/media/?page=page-2
 		https://skillbox.ru/media/?page=page-3
 		https://skillbox.ru/media/?page=page-4
 		https://skillbox.ru/media/?page=page-5
-		https://skillbox.ru/media/?page=page-336
+		https://skillbox.ru/media/?page=page-337
 	https://skillbox.ru/code/
 		https://skillbox.ru/code/faculty/backend-development/
 		https://skillbox.ru/code/faculty/web-development/

@@ -40,8 +40,12 @@ public class CarController {
     }
 
     @PutMapping("/cars/{id}")
-    public Car carPutId(@PathVariable int id) {
-        return Storage.updateCar(id);
+    public ResponseEntity carPutId(@PathVariable int id) {
+        Car car = Storage.updateCar(id);
+        if(car == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return new ResponseEntity(car, HttpStatus.OK);
     }
 
     @DeleteMapping("/cars/{id}")

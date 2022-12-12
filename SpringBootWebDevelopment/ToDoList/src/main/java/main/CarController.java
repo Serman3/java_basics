@@ -6,11 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import main.model.Car;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.ReentrantLock;
 
 @RestController
 @RequestMapping("cars")
@@ -22,7 +21,7 @@ public class CarController {
     @GetMapping("/cars/")
     public List<Car> allCars(){
         Iterable<Car> carIterable = carRepository.findAll();
-        CopyOnWriteArrayList cars = new CopyOnWriteArrayList();
+        List<Car> cars = new ArrayList<>();
         for(Car car : carIterable){
             cars.add(car);
         }
@@ -51,14 +50,12 @@ public class CarController {
 
     @PutMapping("/cars/")
     public List<Car> carAllPut(){
-        ReentrantLock locker = new ReentrantLock();
-        locker.lock();
         int min = 1980;
         int max = 2022;
         int diff = max - min;
         Random random = new Random();
         Iterable<Car> carIterable = carRepository.findAll();
-        CopyOnWriteArrayList cars = new CopyOnWriteArrayList();
+        List<Car> cars = new ArrayList<>();
         for(Car car : carIterable){
             int i = random.nextInt(diff + 1);
             i += min;
@@ -67,7 +64,6 @@ public class CarController {
             carRepository.save(car);
             cars.add(car);
         }
-        locker.unlock();
         return cars;
     }
 
@@ -87,7 +83,7 @@ public class CarController {
     public List<Car> deleteCar(@PathVariable int id){
         carRepository.deleteById(id);
         Iterable<Car> carIterable = carRepository.findAll();
-        CopyOnWriteArrayList cars = new CopyOnWriteArrayList();
+        List<Car> cars = new ArrayList<>();
         for(Car car : carIterable){
             cars.add(car);
         }

@@ -10,7 +10,7 @@
     <div id="car-form">
         <form>
             <h2>Добавление автомобиля</h2>
-            <label>Название автомобиля: </label>
+            <label>Название автомобиля:</label>
             <input type="text" name="name" value="">
             <label>Год выпуска:</label>
             <input type="text" name="year" value="">
@@ -26,5 +26,7 @@
             <a href="#" class="car-link" th:attr="data-id=${car.id}" th:text="${car.name}"></a>
         </div>
     </div>
+    <!-- Значение из второго файла пропертис -->
+    <p th:text="${someParameter}"></p>
 </body>
 </html>

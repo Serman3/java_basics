@@ -18,17 +18,34 @@ public class Loader {
 
     private static HashMap<Integer, WorkTime> voteStationWorkTimes = new HashMap<>();
     private static HashMap<Voter, Integer> voterCounts = new HashMap<>();
-    private static final String fileName = "res/data-18M.xml";
+    private static final String fileName = "res/data-1572M.xml";
 
     public static void main(String[] args) throws Exception {
-        long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+        long start = System.currentTimeMillis();
+        parseBySAX();
+        System.out.println("Parsing duration " + (System.currentTimeMillis() - start) + " ms");
+
+//////////////////////////////////////////////////////////////////////////////
+
+        /*long start = System.currentTimeMillis();
+        parseFile(fileName);
+
+        System.out.println("Parsing duration " + (System.currentTimeMillis() - start) + " ms");
+
+        DBConnection.printVoterCounts();*/
+
+///////////////////////////////////////////////////////////////////////////////
+
+        /*long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
         //parseByDOM();              //-xmx500m 208_649_304, -xmx50m heap space
 
         parseBySAX();              // До оптимизации: -xmx500m 40_333_456,  -xmx50m 26_053_232
                                    // После оптимизации: -xmx 50m 30_475_720
         usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage;
-        System.out.println(usage);
+        System.out.println(usage);*/
+
     }
 
     private static void parseBySAX() throws Exception{
@@ -36,7 +53,9 @@ public class Loader {
         SAXParser parser = factory.newSAXParser();
         XMLHandler handler = new XMLHandler();
         parser.parse(new File(fileName), handler);
-        handler.printDuplicatedVoters();
+        handler.writeToDataBase();
+        DBConnection.printVoterCounts();
+        //handler.printDuplicatedVoters();
     }
 
     private static void parseByDOM(String fileName){
@@ -67,8 +86,7 @@ public class Loader {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new File(fileName));
-
-        findEqualVoters(doc);
+        //findEqualVoters(doc);
         fixWorkTimes(doc);
     }
 
@@ -83,11 +101,12 @@ public class Loader {
             String birthDay = attributes.getNamedItem("birthDay").getNodeValue();
             /*Date birthDay = birthDayFormat
                 .parse(attributes.getNamedItem("birthDay").getNodeValue());*/
-
+           // DBConnection.countVoter(name,birthDay);
             Voter voter = new Voter(name, birthDay);
             Integer count = voterCounts.get(voter);
             voterCounts.put(voter, count == null ? 1 : count + 1);
         }
+        //DBConnection.executeMultiInsert();
     }
 
     private static void fixWorkTimes(Document doc) throws Exception {

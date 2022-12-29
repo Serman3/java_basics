@@ -12,7 +12,7 @@ public class DBConnection {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=false" + "&serverTimezone=UTC" +
+                    "jdbc:mysql://localhost:3306/" + dbName + "?verifyServerCertificate=false&useSSL=false&requireSSL=false&useLegacyDatetimeCode=false&amp&serverTimezone=UTC" +
                         "&user=" + dbUser + "&password=" + dbPass);
                 connection.createStatement().execute("DROP TABLE IF EXISTS voter_count");
                 connection.createStatement().execute("CREATE TABLE voter_count(" +
@@ -20,8 +20,7 @@ public class DBConnection {
                     "name TINYTEXT NOT NULL, " +
                     "birthDate DATE NOT NULL, " +
                     "`count` INT NOT NULL, " +
-                    "PRIMARY KEY(id), KEY (name(50)), " +
-                    "UNIQUE KEY name_date(name(50), birthDate))");
+                    "PRIMARY KEY(id))");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -31,8 +30,7 @@ public class DBConnection {
 
     public static void executeMultiInsert(StringBuilder insertQuery) throws SQLException {
         String sql = "INSERT INTO voter_count(name, birthDate, count)" +
-                "VALUES" + insertQuery.toString() +
-                "ON DUPLICATE KEY UPDATE `count`=`count` + 1";
+                "VALUES" + insertQuery.toString();
         DBConnection.getConnection().createStatement().execute(sql);
     }
 

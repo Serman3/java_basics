@@ -9,8 +9,8 @@ public class XMLHandler extends DefaultHandler {
 
     private Voter voter;
     private final Map<Voter, Byte> voterCounts;
-    private static StringBuilder insertQuery;
-    private static final int limit = 150000;
+    private static StringBuilder insertQuery = new StringBuilder();
+    private static final int limit = 7000000;
     //private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
 
     public XMLHandler(){
@@ -19,23 +19,27 @@ public class XMLHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if (voterCounts.size() >= limit) {
-                try {
-                    writeToDataBase();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                voterCounts.clear();
-            }
+
             if (qName.equals("voter") && voter == null) {
                 //Date birthDay = birthDayFormat.parse(attributes.getValue("birthDay"));
                 voter = new Voter(attributes.getValue("name"), attributes.getValue("birthDay"));
-            }
-            else if(qName.equals("visit") && voter != null){
-                byte count = voterCounts.getOrDefault(voter,(byte)0);
+            } else if (qName.equals("visit") && voter != null) {
+                byte count = voterCounts.getOrDefault(voter, (byte) 0);
                 count++;
-                voterCounts.put(voter, count);
+                //voterCounts.put(voter, count);
+                insertQuery.append(insertQuery.length() == 0 ? "" : ",")
+                        .append("('").append(voter.getName()).append("','").append(voter.getBirthDay())
+                        .append("',").append(count).append(")");
+                if(insertQuery.length() >= limit) {
+                    try {
+                        DBConnection.executeMultiInsert(insertQuery);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    insertQuery.setLength(0);
+                }
             }
+            System.out.println(insertQuery.length());
     }
 
     @Override
@@ -54,8 +58,8 @@ public class XMLHandler extends DefaultHandler {
         }
     }
 
-    public void writeToDataBase() throws SQLException {
-            insertQuery = new StringBuilder();
+    public void writeToDatabase(){
+        try {
             for (Voter voter : voterCounts.keySet()) {
                 String name = voter.getName();
                 String birthDate = voter.getBirthDay();
@@ -65,6 +69,9 @@ public class XMLHandler extends DefaultHandler {
                         .append("',").append(count).append(")");
             }
             DBConnection.executeMultiInsert(insertQuery);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

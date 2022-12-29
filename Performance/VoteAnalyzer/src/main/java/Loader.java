@@ -53,7 +53,7 @@ public class Loader {
         SAXParser parser = factory.newSAXParser();
         XMLHandler handler = new XMLHandler();
         parser.parse(new File(fileName), handler);
-        handler.writeToDataBase();
+        handler.writeToDatabase();
         DBConnection.printVoterCounts();
         //handler.printDuplicatedVoters();
     }

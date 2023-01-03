@@ -7,7 +7,6 @@ public class Station {
     private double depth;
     private boolean hasConnection;
 
-
     public Station(String name) {
         this.name = name;
     }

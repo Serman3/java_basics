@@ -13,7 +13,8 @@ public class Task extends RecursiveAction {
         this.sizeInByte = sizeInByte;
     }
 
-    private static Set<PathAndSize> set = new TreeSet<>();
+    private static Set<PathAndSize> set = Collections.synchronizedSet(new TreeSet<>());
+    //private static Set<PathAndSize> set = new TreeSet<>();
 
     public synchronized void processFilesFromFolder(File folder, long sizeFile){
         File[] files = folder.listFiles();

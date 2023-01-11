@@ -3,6 +3,8 @@ package searchengine.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,10 +20,10 @@ public class Page {
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "site_id",referencedColumnName = "id",insertable = false, updatable = false,nullable = false)
+    @JoinColumn(name = "site_id", nullable = false)
     private Site siteId;
 
-    @Column(columnDefinition = "TEXT UNIQUE KEY pathIndex (path(512), site_id)", nullable = false)
+    @Column(columnDefinition = "TEXT NOT NULL, UNIQUE KEY pathIndex (path(512),site_id)")
     private String path;
 
     @Column(nullable = false)

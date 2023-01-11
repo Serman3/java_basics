@@ -22,7 +22,7 @@ public class Site {
     @Column(columnDefinition = "ENUM('INDEXING', 'INDEXED', 'FAILED')", nullable = false)
     private Status status;
 
-    @Column(name = "status_time", nullable = false)
+    @Column(name = "status_time", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime statusTime;
 
     @Column(name = "last_error", columnDefinition = "TEXT")

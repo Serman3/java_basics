@@ -6,5 +6,6 @@ import searchengine.model.Page;
 
 @Repository
 public interface PageRepository extends JpaRepository<Page, Integer> {
-
+    //Page findByPathContaining(String path);
+    int countAllByPath(String path);
 }

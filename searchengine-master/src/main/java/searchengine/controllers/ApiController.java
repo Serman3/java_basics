@@ -29,6 +29,6 @@ public class ApiController {
 
     @GetMapping("/startIndexing")
     public Map<String,String> startIndexing(){
-        return indexingService.startIndexing();
+        return indexingService.startedIndexing();
     }
 }

@@ -5,25 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import searchengine.config.Site;
 import searchengine.config.SitesList;
-import searchengine.dto.statistics.SiteIndexingAction;
-import searchengine.dto.statistics.StatisticsResponse;
-import searchengine.dto.statistics.URL;
-import searchengine.repository.IndexingRepository;
+import searchengine.dto.statistics.MyThreadParser;
+import searchengine.model.Status;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ForkJoinPool;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class IndexingServiceImpl implements IndexingService{
 
-    private SitesList sitesList;
-
-    @Autowired
-    private IndexingRepository indexingRepository;
+    private final SitesList sites;
 
     @Autowired
     private SiteRepository siteRepository;
@@ -31,20 +25,25 @@ public class IndexingServiceImpl implements IndexingService{
     @Autowired
     private PageRepository pageRepository;
 
-
     @Override
-    public Map<String,String> startIndexing() {
+    public Map<String,String> startedIndexing() {
 
         Map<String, String> map = new HashMap<>();
+        List<Site> listSites = sites.getSites();
+        String[] result = { "true", "false" };
+        String error = "Индексация уже запущена";
 
-        for(Site site : sitesList.getSites()){
-            String siteLink = site.getUrl();
-            ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-            URL url = new URL(siteLink);
-            forkJoinPool.invoke(new SiteIndexingAction(url));
+        siteRepository.deleteAll();
+        pageRepository.deleteAll();
+
+        for(Site site : listSites){
+            MyThreadParser myThreadParser = new MyThreadParser(pageRepository, siteRepository, site);
+            Thread myThread = new Thread(myThreadParser);
+            myThread.start();
         }
-        System.out.println("FINISH");
-        map.put("result", "true");
+
+        map.put("result", result[0]);
         return map;
     }
+
 }

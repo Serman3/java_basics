@@ -8,6 +8,9 @@ import org.jsoup.select.Elements;
 import searchengine.model.Page;
 import searchengine.model.Site;
 import searchengine.repository.PageRepository;
+import searchengine.repository.SiteRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.RecursiveAction;
 
@@ -16,13 +19,15 @@ public class SiteIndexingAction extends RecursiveAction {
     private URL url;
     private Site site;
     private PageRepository pageRepository;
+    private SiteRepository siteRepository;
 
     private static CopyOnWriteArraySet<String> links = new CopyOnWriteArraySet<>();
 
-    public SiteIndexingAction(URL url, Site site, PageRepository pageRepository) {
+    public SiteIndexingAction(URL url, Site site, PageRepository pageRepository, SiteRepository siteRepository) {
         this.url = url;
         this.site = site;
         this.pageRepository = pageRepository;
+        this.siteRepository = siteRepository;
     }
 
     @Override
@@ -48,11 +53,17 @@ public class SiteIndexingAction extends RecursiveAction {
                         url.addChildUrl(new URL(path));
                         Page page = new Page(site, path, code, html);
                         pageRepository.save(page);
+                        List<Site> siteList = siteRepository.findAll();
+                        for(Site site : siteList){
+                            LocalDateTime updateTime = LocalDateTime.now();
+                            site.setStatusTime(updateTime);
+                            siteRepository.save(site);
+                        }
                         links.add(path);
                     }
                 }
                 for (URL childUrl : url.getChildUrl()) {
-                    SiteIndexingAction task = new SiteIndexingAction(childUrl, site, pageRepository);
+                    SiteIndexingAction task = new SiteIndexingAction(childUrl, site, pageRepository, siteRepository);
                     task.fork();
                     task.join();
                 }

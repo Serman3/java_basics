@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.services.IndexingService;
 import searchengine.services.StatisticsService;
-
 import java.util.Map;
 
 @RestController
@@ -28,7 +27,11 @@ public class ApiController {
     }
 
     @GetMapping("/startIndexing")
-    public Map<String,String> startIndexing(){
-        return indexingService.startedIndexing();
+    public ResponseEntity<Map<String,String>> startIndexing(){
+        Map<String, String> response = indexingService.startedIndexing();
+        if(response.get("result").equals("false")){
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok().body(response);
     }
 }

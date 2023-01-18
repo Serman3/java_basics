@@ -12,6 +12,7 @@ public class MyThreadParser implements Runnable{
     private PageRepository pageRepository;
     private SiteRepository siteRepository;
     private Site site;
+    private static ForkJoinPool forkJoinPool = new ForkJoinPool();
 
     public MyThreadParser(PageRepository pageRepository, SiteRepository siteRepository, Site site) {
         this.pageRepository = pageRepository;
@@ -25,8 +26,8 @@ public class MyThreadParser implements Runnable{
         searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, statusTime, "NULL", site.getUrl(), site.getName());
         siteRepository.save(newSite);
         URL url = new URL(site.getUrl());
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        forkJoinPool.invoke(new SiteIndexingAction(url, newSite, pageRepository));
+        //ForkJoinPool forkJoinPool = new ForkJoinPool();
+        forkJoinPool.invoke(new SiteIndexingAction(url, newSite, pageRepository, siteRepository));
         System.out.println("FINISHED");
         forkJoinPool.shutdown();
         if(forkJoinPool.isShutdown()){
@@ -37,4 +38,11 @@ public class MyThreadParser implements Runnable{
         }
     }
 
+    public static boolean fjpIsActive(){
+        return forkJoinPool.hasQueuedSubmissions();
+    }
+
+    public static int getPoolSize(){
+        return forkJoinPool.getPoolSize();
+    }
 }

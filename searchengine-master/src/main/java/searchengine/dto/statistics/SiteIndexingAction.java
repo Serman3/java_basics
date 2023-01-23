@@ -20,6 +20,7 @@ public class SiteIndexingAction extends RecursiveAction {
     private Site site;
     private PageRepository pageRepository;
     private SiteRepository siteRepository;
+    private volatile boolean isIndexing;
 
     private static CopyOnWriteArraySet<String> links = new CopyOnWriteArraySet<>();
 
@@ -28,6 +29,7 @@ public class SiteIndexingAction extends RecursiveAction {
         this.site = site;
         this.pageRepository = pageRepository;
         this.siteRepository = siteRepository;
+        this.isIndexing = true;
     }
 
     @Override
@@ -68,6 +70,8 @@ public class SiteIndexingAction extends RecursiveAction {
                     task.join();
                 }
             }
+        }catch (InterruptedException ie){
+            Thread.currentThread().interrupt();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -80,4 +84,9 @@ public class SiteIndexingAction extends RecursiveAction {
         }
         return false;
     }
+
+    public void stopIndexing(){
+        this.isIndexing = false;
+    }
+
 }

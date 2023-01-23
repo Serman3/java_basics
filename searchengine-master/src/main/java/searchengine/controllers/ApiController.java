@@ -34,4 +34,14 @@ public class ApiController {
         }
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/stopIndexing")
+    public ResponseEntity<Map<String,String>> stopIndexing(){
+        Map<String, String> response = indexingService.stopIndexing();
+        if(response.get("result").equals("false")){
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
 }

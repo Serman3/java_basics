@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "site")
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public class Site{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int id;
 
@@ -32,11 +33,11 @@ public class Site{
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     private String name;
 
-   /* @OneToMany(mappedBy = "site_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "site", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<Page> indexPage;
 
-    @OneToMany(mappedBy = "site_id", cascade = CascadeType.ALL)
-    private List<Lemma> indexLemma;*/
+    @OneToMany(mappedBy = "site", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    private List<Lemma> indexLemma;
 
     public Site(){};
 

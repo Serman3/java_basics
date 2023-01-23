@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "`index`")
@@ -14,20 +13,17 @@ import java.util.List;
 public class Index {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JoinColumn(name = "page_id", nullable = false)
-    private List<Page> pageId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)
+    private Page page;
 
-    //@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JoinColumn(name = "lemma_id", nullable = false)
-    private List<Lemma> lemmaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lemma_id", referencedColumnName = "id", nullable = false)
+    private Lemma lemma;
 
-    @Column(name = "`rank`",nullable = false)
+    @Column(name = "`rank`",columnDefinition = "FLOAT NOT NULL")
     private float rank;
 }

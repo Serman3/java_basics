@@ -14,11 +14,11 @@ import java.util.Objects;
 public class Page {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = Site.class, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}/*cascade = CascadeType.MERGE, targetEntity = Site.class, fetch = FetchType.LAZY*/)
     @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
     private Site site;
 
@@ -31,9 +31,9 @@ public class Page {
     @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "page", cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL/*mappedBy = "page", cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true*/)
+    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
     private List<Index> indexList;
 
     public Page(){};

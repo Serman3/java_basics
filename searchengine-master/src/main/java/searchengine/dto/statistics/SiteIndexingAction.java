@@ -20,23 +20,24 @@ public class SiteIndexingAction extends RecursiveAction {
     private Site site;
     private PageRepository pageRepository;
     private SiteRepository siteRepository;
-    private volatile boolean isIndexing;
+    private UtilParsing utilParsing;
 
     private static CopyOnWriteArraySet<String> links = new CopyOnWriteArraySet<>();
 
-    public SiteIndexingAction(URL url, Site site, PageRepository pageRepository, SiteRepository siteRepository) {
+    public SiteIndexingAction(URL url, Site site, PageRepository pageRepository, SiteRepository siteRepository, UtilParsing utilParsing) {
         this.url = url;
         this.site = site;
         this.pageRepository = pageRepository;
         this.siteRepository = siteRepository;
-        this.isIndexing = true;
-    }
+        this.utilParsing = utilParsing;
+        }
 
     @Override
     protected void compute() {
         try {
             Connection connection = Jsoup.connect(url.getUrl())
                     .ignoreContentType(true)
+                    .ignoreHttpErrors(true)
                     .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                     .referrer("http://www.google.com")
                     .timeout(30000);
@@ -45,16 +46,21 @@ public class SiteIndexingAction extends RecursiveAction {
             if (response.contentType().startsWith("text/html" )) {
                 Thread.sleep(200);
                 document = connection.get();
-                Elements line = document.select("body").select("a");
-                String html = document.outerHtml();
+                Elements line = document.body().select("a[href]")/*select("body").select("a")*/;
+                String html = document.html();
                 int code = document.connection().response().statusCode();
                 for (Element element : line) {
                     String path = element.attr("abs:href");
                     if (isCorrectUrl(path) && pageRepository.countAllByPath(path) < 1) {
                         System.out.println(path);
+                        if(utilParsing.isStopped()){
+                            clearAllCollections();
+                            System.out.println("STOPPED FAILED");
+                            break;
+                        }
                         url.addChildUrl(new URL(path));
-                        Page page = new Page(site, path, code, html);
-                        pageRepository.save(page);
+                        savePage(site, path, code, html);
+
                         List<Site> siteList = siteRepository.findAll();
                         for(Site site : siteList){
                             LocalDateTime updateTime = LocalDateTime.now();
@@ -65,10 +71,11 @@ public class SiteIndexingAction extends RecursiveAction {
                     }
                 }
                 for (URL childUrl : url.getChildUrl()) {
-                    SiteIndexingAction task = new SiteIndexingAction(childUrl, site, pageRepository, siteRepository);
+                    SiteIndexingAction task = new SiteIndexingAction(childUrl, site, pageRepository, siteRepository, utilParsing);
                     task.fork();
                     task.join();
                 }
+                clearAllCollections();
             }
         }catch (InterruptedException ie){
             Thread.currentThread().interrupt();
@@ -85,8 +92,19 @@ public class SiteIndexingAction extends RecursiveAction {
         return false;
     }
 
-    public void stopIndexing(){
-        this.isIndexing = false;
+    public synchronized void savePage(Site site, String path, int code, String html){
+        Page page = new Page(site, path, code, html);
+        try{
+            pageRepository.save(page);
+            utilParsing.transformationLemmasAndIndex(page);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void clearAllCollections(){
+        url.getChildUrl().clear();
+        links.clear();
     }
 
 }

@@ -1,15 +1,12 @@
 package searchengine.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "lemma")
-@NoArgsConstructor
 @Getter
 @Setter
 public class Lemma {
@@ -18,8 +15,8 @@ public class Lemma {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(targetEntity = Site.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}/*cascade = CascadeType.MERGE, targetEntity = Site.class, fetch = FetchType.LAZY*//*cascade = CascadeType.MERGE, targetEntity = Site.class, *//*fetch = FetchType.LAZY*//*targetEntity = Site.class, fetch = FetchType.LAZY*/)
+    @JoinColumn(name = "site_id", referencedColumnName = "id")
     private Site site;
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
@@ -28,8 +25,17 @@ public class Lemma {
     @Column(nullable = false)
     private int frequency;
 
-    @OneToMany(mappedBy = "lemma", cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL/*mappedBy = "lemma", cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true*/)
+    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
     private List<Index> indexList;
+
+    public Lemma(){};
+
+    public Lemma(Site site, String lemma, int frequency){
+        this.site = site;
+        this.lemma = lemma;
+        this.frequency = frequency;
+    }
+
 }

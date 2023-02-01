@@ -2,6 +2,8 @@ package searchengine.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,10 +35,12 @@ public class Site{
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "site", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
+    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
     private List<Page> indexPage;
 
-    @OneToMany(mappedBy = "site", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
+    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
     private List<Lemma> indexLemma;
 
     public Site(){};

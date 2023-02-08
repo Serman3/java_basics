@@ -1,4 +1,4 @@
-package searchengine.dto.statistics;
+package searchengine.parsing;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +32,8 @@ public class LemmaFinder {
         return new LemmaFinder(morphology);
     }
 
-    public synchronized String clearHTMLTags(Page page){
-       StringBuilder stringBuilder = new StringBuilder();
+    public String clearHTMLTags(Page page){
+       StringBuilder outputBuilder = new StringBuilder();
        Document jsoupDoc = Jsoup.parse(page.getContent());
        Document.OutputSettings outputSettings = new Document.OutputSettings();
        outputSettings.prettyPrint(false);
@@ -42,8 +42,8 @@ public class LemmaFinder {
        jsoupDoc.select("p").before("\\n");
        String str = jsoupDoc.html().replaceAll("\\\\n", "\n");
        String strWithNewLines = Jsoup.clean(str, "", Safelist.none(), outputSettings);
-       stringBuilder.append(strWithNewLines);
-       return stringBuilder.toString();
+       outputBuilder.append(strWithNewLines);
+       return outputBuilder.toString();
     }
 
     /**
@@ -52,7 +52,7 @@ public class LemmaFinder {
      * @param text текст из которого будут выбираться леммы
      * @return ключ является леммой, а значение количеством найденных лемм
      */
-    public synchronized Map<String, Integer> collectLemmas(String text) {
+    public Map<String, Integer> collectLemmas(String text) {
         String[] words = arrayContainsRussianWords(text);
         HashMap<String, Integer> lemmas = new HashMap<>();
 

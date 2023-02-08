@@ -1,4 +1,4 @@
-package searchengine.dto.statistics;
+package searchengine.parsing;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
@@ -17,8 +17,15 @@ import java.util.concurrent.ForkJoinPool;
 @RequiredArgsConstructor
 public class UtilParsing {
 
-    private ForkJoinPool forkJoinPool;
     private volatile boolean doStop = false;
+    private LemmaFinder lemmaFinder;
+    {
+        try {
+            lemmaFinder = new LemmaFinder(new RussianLuceneMorphology());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Autowired
     private SiteRepository siteRepository;
@@ -33,18 +40,16 @@ public class UtilParsing {
     private PageRepository pageRepository;
 
     public void startIndexing(String path, String name){
-        LocalDateTime statusTime = LocalDateTime.now();
-        searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, statusTime, "NULL", path, name);
+        searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, LocalDateTime.now(), "NULL", path, name);
         siteRepository.save(newSite);
-        SiteIndexingAction siteIndexingAction = new SiteIndexingAction(new URL(path), newSite, pageRepository, siteRepository, UtilParsing.this);
-        forkJoinPool = new ForkJoinPool();
+        SiteIndexingAction siteIndexingAction = new SiteIndexingAction(path, newSite, pageRepository, siteRepository, UtilParsing.this);
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
         forkJoinPool.invoke(siteIndexingAction);
         System.out.println("FINISHED");
         forkJoinPool.shutdown();
         if(forkJoinPool.isShutdown()){
-            LocalDateTime newTime = LocalDateTime.now();
             newSite.setStatus(Status.INDEXED);
-            newSite.setStatusTime(newTime);
+            newSite.setStatusTime(LocalDateTime.now());
             siteRepository.save(newSite);
         }
         if(isStopped()){
@@ -54,22 +59,41 @@ public class UtilParsing {
                 site.setStatus(Status.FAILED);
                 siteRepository.save(site);
             }
-
+            doStop(false);
         }
     }
 
-    public void transformationLemmasAndIndex(Page page) throws IOException {
-        LemmaFinder lemmaFinder = new LemmaFinder(new RussianLuceneMorphology());
+    public void transformationLemmasAndIndex(Page page) {
+       /* for (Page page : pageSet){
+            String text = lemmaFinder.clearHTMLTags(page);
+            Lemma lemmaEntity = null;
+            Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
+            for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
+                String lemma = entry.getKey();
+                float rank = (float) entry.getValue();
+                if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
+                    lemmaRepository.save(new Lemma(page.getSite(), lemma, 1));
+                }else{
+                    lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
+                    lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
+                    lemmaRepository.save(lemmaEntity);
+                }
+                indexRepository.save(new Index(page, lemmaEntity, rank));
+            }
+        }*/
         String text = lemmaFinder.clearHTMLTags(page);
         Lemma lemmaEntity = null;
         Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
         for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
+            if(isStopped()){
+                break;
+            }
             String lemma = entry.getKey();
             float rank = (float) entry.getValue();
-            if(!lemmaRepository.findByLemma(lemma).isPresent()){
+            if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
                 lemmaRepository.save(new Lemma(page.getSite(), lemma, 1));
             }else{
-                lemmaEntity = lemmaRepository.findByLemma(lemma).get();
+                lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
                 lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
                 lemmaRepository.save(lemmaEntity);
             }
@@ -77,24 +101,23 @@ public class UtilParsing {
         }
     }
 
-    public boolean isIndexing(Status status){
+    public synchronized boolean isIndexing(Status status){
         List<Site> listSites = siteRepository.findByStatus(status);
         return !listSites.isEmpty();
     }
 
-    public synchronized void doStop() {
-        this.doStop = true;
+    public void doStop(boolean flag) {
+        this.doStop = flag;
     }
 
     public boolean isStopped(){
         return doStop;
     }
 
-    public void closePool(){
+    /*public void closePool(){
         System.out.println("pool close");
         while(!forkJoinPool.isTerminated()){
             forkJoinPool.shutdownNow();
         }
-    }
-
+    }*/
 }

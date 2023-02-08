@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import searchengine.dto.statistics.LemmaFinder;
-import searchengine.dto.statistics.UtilParsing;
+import searchengine.parsing.LemmaFinder;
+import searchengine.parsing.UtilParsing;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
@@ -13,7 +13,6 @@ import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -45,7 +44,7 @@ public class LemmaServiceImpl extends UtilParsing implements LemmaService{
         }
         startReIndexing(url);
 
-        List<Page> pages = pageRepository.findByPathStartingWith(url);
+        /*List<Page> pages = pageRepository.findByPathStartingWith(url);
         for(Page page : pages){
             String text = lemmaFinder.clearHTMLTags(page);
             Lemma lemmaEntity = null;
@@ -53,17 +52,17 @@ public class LemmaServiceImpl extends UtilParsing implements LemmaService{
             for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
                 String lemma = entry.getKey();
                 float rank = (float) entry.getValue();
-                if(!lemmaRepository.findByLemma(lemma).isPresent()){
+                if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
                     lemmaRepository.save(new Lemma(page.getSite(), lemma, 1));
                 }else{
-                    lemmaEntity = lemmaRepository.findByLemma(lemma).get();
+                    lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
                     lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
                     lemmaRepository.save(lemmaEntity);
                 }
                 indexRepository.save(new Index(page, lemmaEntity, rank));
             }
 
-        }
+        }*/
         response.put("result","true");
         return response;
     }

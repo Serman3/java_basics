@@ -2,8 +2,7 @@ package searchengine.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-
+import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,11 +35,13 @@ public class Site{
     private String name;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
-    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @BatchSize(size = 2)
     private List<Page> indexPage;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
-    @Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @BatchSize(size = 2)
     private List<Lemma> indexLemma;
 
     public Site(){};

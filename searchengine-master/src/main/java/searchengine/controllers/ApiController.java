@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.services.IndexingService;
 import searchengine.services.LemmaService;
+import searchengine.services.SearchService;
 import searchengine.services.StatisticsService;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -17,12 +17,13 @@ public class ApiController {
     private final StatisticsService statisticsService;
     private final IndexingService indexingService;
     private final LemmaService lemmaService;
+    private final SearchService searchService;
 
-    public ApiController(StatisticsService statisticsService, IndexingService indexingService, LemmaService lemmaService) {
+    public ApiController(StatisticsService statisticsService, IndexingService indexingService, LemmaService lemmaService, SearchService searchService) {
         this.statisticsService = statisticsService;
         this.indexingService = indexingService;
         this.lemmaService = lemmaService;
-
+        this.searchService = searchService;
     }
 
     @GetMapping("/statistics")
@@ -56,6 +57,18 @@ public class ApiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(response.get("result").equals("false")){
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String,String>> search(@RequestParam(value = "query") String query,
+                                                     @RequestParam(value = "site", defaultValue = "") String siteUrl,
+                                                     @RequestParam(value = "offset", defaultValue = "0") int offset,
+                                                     @RequestParam(value = "limit", defaultValue = "20") int limit){
+        Map<String, String> response = searchService.search(query, siteUrl, offset, limit);
         if(response.get("result").equals("false")){
             return ResponseEntity.badRequest().body(response);
         }

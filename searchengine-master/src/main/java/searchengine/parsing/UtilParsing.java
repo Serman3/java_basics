@@ -18,6 +18,14 @@ import java.util.concurrent.ForkJoinPool;
 public class UtilParsing {
 
     private volatile boolean doStop = false;
+    @Autowired
+    private SiteRepository siteRepository;
+    @Autowired
+    private PageRepository pageRepository;
+    @Autowired
+    private LemmaRepository lemmaRepository;
+    @Autowired
+    private IndexRepository indexRepository;
     private LemmaFinder lemmaFinder;
     {
         try {
@@ -27,23 +35,11 @@ public class UtilParsing {
         }
     }
 
-    @Autowired
-    private SiteRepository siteRepository;
-
-    @Autowired
-    private LemmaRepository lemmaRepository;
-
-    @Autowired
-    private IndexRepository indexRepository;
-
-    @Autowired
-    private PageRepository pageRepository;
-
     public void startIndexing(String path, String name){
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
         searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, LocalDateTime.now(), "NULL", path, name);
         siteRepository.save(newSite);
         SiteIndexingAction siteIndexingAction = new SiteIndexingAction(path, newSite, pageRepository, siteRepository, UtilParsing.this);
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
         forkJoinPool.invoke(siteIndexingAction);
         System.out.println("FINISHED");
         forkJoinPool.shutdown();
@@ -53,45 +49,25 @@ public class UtilParsing {
             siteRepository.save(newSite);
         }
         if(isStopped()){
-            List<searchengine.model.Site> siteList = siteRepository.findAll();
-            for (searchengine.model.Site site : siteList) {
-                site.setLastError("Индексация остановлена пользователем");
-                site.setStatus(Status.FAILED);
-                siteRepository.save(site);
-            }
+            setStatusSiteFailed();
+            forkJoinPool.shutdownNow();
             doStop(false);
         }
     }
 
     public void transformationLemmasAndIndex(Page page) {
-       /* for (Page page : pageSet){
-            String text = lemmaFinder.clearHTMLTags(page);
-            Lemma lemmaEntity = null;
-            Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
-            for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
-                String lemma = entry.getKey();
-                float rank = (float) entry.getValue();
-                if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
-                    lemmaRepository.save(new Lemma(page.getSite(), lemma, 1));
-                }else{
-                    lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
-                    lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
-                    lemmaRepository.save(lemmaEntity);
-                }
-                indexRepository.save(new Index(page, lemmaEntity, rank));
-            }
-        }*/
         String text = lemmaFinder.clearHTMLTags(page);
-        Lemma lemmaEntity = null;
         Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
         for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
+            Lemma lemmaEntity = null;
             if(isStopped()){
                 break;
             }
             String lemma = entry.getKey();
             float rank = (float) entry.getValue();
             if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
-                lemmaRepository.save(new Lemma(page.getSite(), lemma, 1));
+                lemmaEntity = new Lemma(page.getSite(), lemma, 1);
+                lemmaRepository.save(lemmaEntity);
             }else{
                 lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
                 lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
@@ -106,6 +82,15 @@ public class UtilParsing {
         return !listSites.isEmpty();
     }
 
+    public void setStatusSiteFailed(){
+        List<searchengine.model.Site> siteList = siteRepository.findAll();
+        for (searchengine.model.Site site : siteList) {
+            site.setLastError("Индексация остановлена пользователем");
+            site.setStatus(Status.FAILED);
+            siteRepository.save(site);
+        }
+    }
+
     public void doStop(boolean flag) {
         this.doStop = flag;
     }
@@ -113,11 +98,4 @@ public class UtilParsing {
     public boolean isStopped(){
         return doStop;
     }
-
-    /*public void closePool(){
-        System.out.println("pool close");
-        while(!forkJoinPool.isTerminated()){
-            forkJoinPool.shutdownNow();
-        }
-    }*/
 }

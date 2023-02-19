@@ -34,13 +34,11 @@ public class Site{
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
-    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     @BatchSize(size = 2)
     private List<Page> indexPage;
 
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL/*{CascadeType.REMOVE, CascadeType.MERGE}*/)
-    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     @BatchSize(size = 2)
     private List<Lemma> indexLemma;
 

@@ -7,23 +7,29 @@ import searchengine.config.SiteConfig;
 import searchengine.config.SitesList;
 import searchengine.parsing.UtilParsing;
 import searchengine.model.Status;
+import searchengine.repository.IndexRepository;
+import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
+import searchengine.services.InterfacesServices.IndexingService;
+
 import java.util.*;
 import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
-public class IndexingServiceImpl extends UtilParsing implements IndexingService{
+public class IndexingServiceImpl extends UtilParsing implements IndexingService {
 
     private final SitesList sites;
+    @Autowired
+    private final SiteRepository siteRepository;
+    @Autowired
+    private final PageRepository pageRepository;
+    @Autowired
+    private final LemmaRepository lemmaRepository;
+    @Autowired
+    private final IndexRepository indexRepository;
     private static final int CORE = Runtime.getRuntime().availableProcessors();
-
-    @Autowired
-    private SiteRepository siteRepository;
-
-    @Autowired
-    private PageRepository pageRepository;
 
     @Override
     public Map<String,String> startedIndexing() {
@@ -43,10 +49,11 @@ public class IndexingServiceImpl extends UtilParsing implements IndexingService{
         ExecutorService executorService = Executors.newFixedThreadPool(CORE);
         try {
             for(SiteConfig site : listSites) {
-                executorService.submit(new Runnable() {
+                executorService.submit(
+                        new Runnable() {
                     @Override
                     public void run() {
-                        startIndexing(site.getUrl(), site.getName());
+                       startIndexing(site.getUrl(), site.getName());
                     }
                 });
             }
@@ -71,19 +78,5 @@ public class IndexingServiceImpl extends UtilParsing implements IndexingService{
         response.put("result", "true");
         return response;
     }
-
-
-    /*public void closePool(ExecutorService pool){
-        while(!pool.isTerminated()){
-            pool.shutdownNow();
-        }
-        System.out.println("pool close");
-    }
-
-    public boolean isIndexing(Status status){
-        List<Site> listSites = siteRepository.findByStatus(status);
-        return !listSites.isEmpty();
-    }*/
-
 }
 

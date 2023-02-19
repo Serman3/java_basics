@@ -12,6 +12,8 @@ import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
+import searchengine.services.InterfacesServices.StatisticsService;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;

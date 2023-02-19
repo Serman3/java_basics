@@ -3,21 +3,20 @@ package searchengine.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "lemma")
+@Table(name = "lemma",  uniqueConstraints = { @UniqueConstraint(name = "lemmaAndSite_id", columnNames = { "lemma", "site_id" } ) })
 @Getter
 @Setter
-public class Lemma {
+public class Lemma  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY/*cascade = CascadeType.MERGE, targetEntity = Site.class, fetch = FetchType.LAZY*//*cascade = CascadeType.MERGE, targetEntity = Site.class, *//*fetch = FetchType.LAZY*//*targetEntity = Site.class, fetch = FetchType.LAZY*/)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "site_id", referencedColumnName = "id")
     private Site site;
 
@@ -27,9 +26,7 @@ public class Lemma {
     @Column(nullable = false)
     private int frequency;
 
-    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL/*mappedBy = "lemma", cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true*/)
-    //@Cascade(org.hibernate.annotations.CascadeType.REPLICATE)
+    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL)
     @BatchSize(size = 2)
     private List<Index> indexList;
 

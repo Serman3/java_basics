@@ -7,6 +7,7 @@ import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Safelist;
+import searchengine.dto.NormalFormWordAndIndex;
 import searchengine.model.Page;
 import java.io.IOException;
 import java.util.*;
@@ -17,7 +18,7 @@ public class LemmaFinder {
 
     private LuceneMorphology luceneMorphology;
     private static final String WORD_TYPE_REGEX = "\\W\\w&&[^а-яА-Я\\s]";
-    private static final String[] particlesNames = new String[]{"МЕЖД", "ПРЕДЛ", "СОЮЗ"};
+    private static final String[] particlesNames = new String[]{"МЕЖД", "ПРЕДЛ", "СОЮЗ", "ВВОДН", "МС", "ЧАСТ", "CONJ", "PART"};
 
     public LemmaFinder(LuceneMorphology luceneMorphology) {
         this.luceneMorphology = luceneMorphology;
@@ -80,6 +81,33 @@ public class LemmaFinder {
             }
         }
         return lemmas;
+    }
+
+    public Map<String, NormalFormWordAndIndex> getEntryLemmaAndNormalFormWordAndIndex(String text){
+        String[] words = arrayContainsRussianWords(text);
+        Map<String,NormalFormWordAndIndex> result = new HashMap<>();
+        for (String word : words) {
+            if (word.isBlank()) {
+                continue;
+            }
+
+            List<String> wordBaseForms = luceneMorphology.getMorphInfo(word);
+            if (anyWordBaseBelongToParticle(wordBaseForms)) {
+                continue;
+            }
+
+            List<String> normalForms = luceneMorphology.getNormalForms(word);
+            if (normalForms.isEmpty()) {
+                continue;
+            }
+
+            String normalWord = normalForms.get(0);
+            int indexWord = text.indexOf(word);
+            if (indexWord != -1) {
+                result.put(normalWord,  new NormalFormWordAndIndex(word, indexWord));
+            }
+        }
+        return result;
     }
 
     /**

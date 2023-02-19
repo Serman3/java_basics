@@ -15,11 +15,11 @@ public class Index {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY/*CascadeType.MERGE, targetEntity = Page.class, fetch = FetchType.LAZY*/)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", referencedColumnName = "id")
     private Page page;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY/*CascadeType.MERGE, targetEntity = Lemma.class, fetch = FetchType.LAZY*/)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "lemma_id", referencedColumnName = "id")
     private Lemma lemma;
 

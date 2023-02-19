@@ -2,11 +2,12 @@ package searchengine.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import searchengine.dto.search.SearchResponse;
 import searchengine.dto.statistics.StatisticsResponse;
-import searchengine.services.IndexingService;
-import searchengine.services.LemmaService;
-import searchengine.services.SearchService;
-import searchengine.services.StatisticsService;
+import searchengine.services.InterfacesServices.IndexingService;
+import searchengine.services.InterfacesServices.LemmaService;
+import searchengine.services.InterfacesServices.SearchService;
+import searchengine.services.InterfacesServices.StatisticsService;
 import java.io.IOException;
 import java.util.Map;
 
@@ -64,15 +65,10 @@ public class ApiController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String,String>> search(@RequestParam(value = "query") String query,
-                                                     @RequestParam(value = "site", defaultValue = "") String siteUrl,
-                                                     @RequestParam(value = "offset", defaultValue = "0") int offset,
-                                                     @RequestParam(value = "limit", defaultValue = "20") int limit){
-        Map<String, String> response = searchService.search(query, siteUrl, offset, limit);
-        if(response.get("result").equals("false")){
-            return ResponseEntity.badRequest().body(response);
-        }
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<SearchResponse> search(@RequestParam(name = "query", defaultValue = "") String query,
+                                                 @RequestParam(name = "site", defaultValue = "") String siteUrl,
+                                                 @RequestParam(name = "offset", defaultValue = "0") int offset,
+                                                 @RequestParam(name = "limit", defaultValue = "20") int limit){
+        return ResponseEntity.ok(searchService.search(query, siteUrl, offset, limit));
     }
-
 }

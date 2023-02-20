@@ -21,7 +21,7 @@ indexing-settings:
   sites:
     - url: https://nikoartgallery.com/
       name: Никола.ру
-    #- url: https://dombulgakova.ru/
-    #  name: Дом Булгакова
-    #- url: https://playback.ru/
-  #  name: PlayBack.Ru
+    - url: https://dombulgakova.ru/
+      name: Дом Булгакова
+    - url: https://playback.ru/
+      name: PlayBack.Ru

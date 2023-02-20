@@ -109,12 +109,13 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
 
     public boolean isCorrectUrl(String url){
         return !url.isEmpty()
-                && !linkIsFile(url)
+                //&& !linkIsFile(url)
                 && url.startsWith(rootUrl)
                 && !allLinks.contains(url)
                 && !url.contains("#")
                 && !url.contains("?method=")
                 && !url.contains("jpg")
+                && !url.contains("JPG")
                 && !url.contains("?");
     }
 

@@ -18,6 +18,7 @@ import java.util.concurrent.ForkJoinPool;
 public class UtilParsing {
 
     private volatile boolean doStop = false;
+    private ForkJoinPool forkJoinPool;
     @Autowired
     private SiteRepository siteRepository;
     @Autowired
@@ -36,7 +37,7 @@ public class UtilParsing {
     }
 
     public void startIndexing(String path, String name){
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        forkJoinPool = new ForkJoinPool();
         searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, LocalDateTime.now(), "NULL", path, name);
         siteRepository.save(newSite);
         SiteIndexingAction siteIndexingAction = new SiteIndexingAction(path, newSite, pageRepository, siteRepository, UtilParsing.this);
@@ -49,8 +50,8 @@ public class UtilParsing {
             siteRepository.save(newSite);
         }
         if(isStopped()){
-            setStatusSiteFailed();
             forkJoinPool.shutdownNow();
+            setStatusSiteFailed();
             doStop(false);
         }
     }
@@ -59,10 +60,11 @@ public class UtilParsing {
         String text = lemmaFinder.clearHTMLTags(page);
         Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
         for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
-            Lemma lemmaEntity = null;
             if(isStopped()){
+                forkJoinPool.shutdownNow();
                 break;
             }
+            Lemma lemmaEntity = null;
             String lemma = entry.getKey();
             float rank = (float) entry.getValue();
             if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){

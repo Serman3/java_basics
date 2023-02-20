@@ -36,14 +36,7 @@ public class LemmaFinder {
     public String clearHTMLTags(Page page){
        StringBuilder outputBuilder = new StringBuilder();
        Document jsoupDoc = Jsoup.parse(page.getContent());
-       Document.OutputSettings outputSettings = new Document.OutputSettings();
-       outputSettings.prettyPrint(false);
-       jsoupDoc.outputSettings(outputSettings);
-       jsoupDoc.select("br").before("\\n");
-       jsoupDoc.select("p").before("\\n");
-       String str = jsoupDoc.html().replaceAll("\\\\n", "\n");
-       String strWithNewLines = Jsoup.clean(str, "", Safelist.none(), outputSettings);
-       outputBuilder.append(strWithNewLines);
+       outputBuilder.append(jsoupDoc.body().text());
        return outputBuilder.toString();
     }
 

@@ -18,7 +18,6 @@ import java.util.concurrent.ForkJoinPool;
 public class UtilParsing {
 
     private volatile boolean doStop = false;
-    private ForkJoinPool forkJoinPool;
     @Autowired
     private SiteRepository siteRepository;
     @Autowired
@@ -37,7 +36,7 @@ public class UtilParsing {
     }
 
     public void startIndexing(String path, String name){
-        forkJoinPool = new ForkJoinPool();
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
         searchengine.model.Site newSite = new searchengine.model.Site(Status.INDEXING, LocalDateTime.now(), "NULL", path, name);
         siteRepository.save(newSite);
         SiteIndexingAction siteIndexingAction = new SiteIndexingAction(path, newSite, pageRepository, siteRepository, UtilParsing.this);
@@ -61,7 +60,6 @@ public class UtilParsing {
         Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(text);
         for (Map.Entry<String,Integer> entry : lemmaInfo.entrySet()){
             if(isStopped()){
-                forkJoinPool.shutdownNow();
                 break;
             }
             Lemma lemmaEntity = null;
@@ -69,11 +67,17 @@ public class UtilParsing {
             float rank = (float) entry.getValue();
             if(!lemmaRepository.findFirstByLemma(lemma).isPresent()){
                 lemmaEntity = new Lemma(page.getSite(), lemma, 1);
+                if(isStopped()){
+                    break;
+                }
                 lemmaRepository.save(lemmaEntity);
             }else{
                 lemmaEntity = lemmaRepository.findFirstByLemma(lemma).get();
                 lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
                 lemmaRepository.save(lemmaEntity);
+            }
+            if(isStopped()){
+                break;
             }
             indexRepository.save(new Index(page, lemmaEntity, rank));
         }

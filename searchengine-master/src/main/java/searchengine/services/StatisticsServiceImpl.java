@@ -13,27 +13,21 @@ import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import searchengine.services.InterfacesServices.StatisticsService;
-
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticsServiceImpl extends UtilParsing implements StatisticsService {
 
-    private final Random random = new Random();
     private final SitesList sites;
     @Autowired
     private SiteRepository siteRepository;
-
     @Autowired
     private LemmaRepository lemmaRepository;
-
     @Autowired
     private IndexRepository indexRepository;
-
     @Autowired
     private PageRepository pageRepository;
 
@@ -42,12 +36,6 @@ public class StatisticsServiceImpl extends UtilParsing implements StatisticsServ
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int pagesCount = pageRepository.findAll().size();
         int lemmasCount = lemmaRepository.findAll().size();
-
-        String[] errors = {
-                "Ошибка индексации: главная страница сайта не доступна",
-                "Ошибка индексации: сайт не доступен",
-                ""
-        };
 
         TotalStatistics total = new TotalStatistics();
         total.setSites(sites.getSites().size());
@@ -67,6 +55,7 @@ public class StatisticsServiceImpl extends UtilParsing implements StatisticsServ
             item.setLemmas(lemmaRepository.countLemmasBySiteId(site.getId()));
             item.setStatus(site.getStatus().toString());
             item.setStatusTime(site.getStatusTime().format(formatter));
+            item.setError(site.getLastError());
             total.setPages(pagesCount);
             total.setLemmas(lemmasCount);
             detailed.add(item);

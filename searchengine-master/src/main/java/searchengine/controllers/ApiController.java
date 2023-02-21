@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import searchengine.dto.search.SearchResponse;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.services.InterfacesServices.IndexingService;
-import searchengine.services.InterfacesServices.LemmaService;
+import searchengine.services.InterfacesServices.IndexingPageService;
 import searchengine.services.InterfacesServices.SearchService;
 import searchengine.services.InterfacesServices.StatisticsService;
 import java.io.IOException;
@@ -17,13 +17,13 @@ public class ApiController {
 
     private final StatisticsService statisticsService;
     private final IndexingService indexingService;
-    private final LemmaService lemmaService;
+    private final IndexingPageService indexingPageService;
     private final SearchService searchService;
 
-    public ApiController(StatisticsService statisticsService, IndexingService indexingService, LemmaService lemmaService, SearchService searchService) {
+    public ApiController(StatisticsService statisticsService, IndexingService indexingService, IndexingPageService indexingPageService, SearchService searchService) {
         this.statisticsService = statisticsService;
         this.indexingService = indexingService;
-        this.lemmaService = lemmaService;
+        this.indexingPageService = indexingPageService;
         this.searchService = searchService;
     }
 
@@ -54,7 +54,7 @@ public class ApiController {
     public ResponseEntity<Map<String,String>> indexPage(@RequestParam String url){
         Map<String, String> response = null;
         try {
-            response = lemmaService.indexPage(url);
+            response = indexingPageService.indexPage(url);
         } catch (IOException e) {
             e.printStackTrace();
         }

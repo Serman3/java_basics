@@ -27,7 +27,8 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
     private SiteRepository siteRepository;
     private UtilParsing utilParsing;
     private static volatile Set<String> allLinks = Collections.synchronizedSet(new HashSet<>());
-    private static final String URL_IS_FILE = "http[s]?:/(?:/[^/]+){1,}/[А-Яа-яёЁ\\w ]+\\.[a-z]{3,5}(?![/]|[\\wА-Яа-яёЁ])";
+    //private static final String URL_IS_FILE = "http[s]?:/(?:/[^/]+){1,}/[А-Яа-яёЁ\\w ]+\\.[a-z]{3,5}(?![/]|[\\wА-Яа-яёЁ])";
+    private static final String URL_IS_FILE = "(\\S+(\\.(?i)(jpg|jpeg|JPG|png|gif|bmp|pdf|xml))$)";
 
     public SiteIndexingAction(String rootUrl, Site site, PageRepository pageRepository, SiteRepository siteRepository, UtilParsing utilParsing){
         this.url = rootUrl;
@@ -109,13 +110,11 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
 
     public boolean isCorrectUrl(String url){
         return !url.isEmpty()
-                //&& !linkIsFile(url)
+                && !linkIsFile(url)
                 && url.startsWith(rootUrl)
                 && !allLinks.contains(url)
                 && !url.contains("#")
                 && !url.contains("?method=")
-                && !url.contains("jpg")
-                && !url.contains("JPG")
                 && !url.contains("?");
     }
 

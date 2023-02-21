@@ -21,11 +21,8 @@ import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import searchengine.services.InterfacesServices.SearchService;
-
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -41,16 +38,13 @@ public class SearchServiceImpl implements SearchService {
     }
     @Autowired
     private final SiteRepository siteRepository;
-
     @Autowired
     private final LemmaRepository lemmaRepository;
-
     @Autowired
     private final IndexRepository indexRepository;
-
     @Autowired
     private final PageRepository pageRepository;
-    private  final SitesList sites;
+    private final SitesList sites;
 
     @Override
     public SearchResponse search(String query, String siteUrl, int offset, int limit) {
@@ -67,6 +61,13 @@ public class SearchServiceImpl implements SearchService {
         }else {
             data.addAll(searchSite(query, siteUrl, pageable));
         }
+
+        if(data.isEmpty()){
+            return new SearchResponse()
+                    .setResult(false)
+                    .setError("По вашему поисковому запросу ничего ненайдено или поисковое слово превышает лимит");
+        }
+
         return new SearchResponse()
                 .setResult(true)
                 .setCount(data.size())
@@ -119,6 +120,7 @@ public class SearchServiceImpl implements SearchService {
                     .setSnippet(snippet)
                     .setRelevance(relativeRelevance));
         }
+        Collections.sort(data, Collections.reverseOrder());
         return data;
     }
 

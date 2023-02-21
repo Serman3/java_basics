@@ -36,5 +36,4 @@ public interface LemmaRepository extends JpaRepository<Lemma, Integer>, Serializ
                   ) as percentage_lemmas_on_page
                   """, nativeQuery = true)
     double findMaxPercentageLemmaOnPagesBySiteId(@Param("siteId") int siteId);
-
 }

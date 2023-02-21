@@ -9,27 +9,23 @@ import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
-import searchengine.services.InterfacesServices.LemmaService;
-
+import searchengine.services.InterfacesServices.IndexingPageService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class LemmaServiceImpl extends UtilParsing implements LemmaService {
+public class IndexingPageServiceImpl extends UtilParsing implements IndexingPageService {
 
     @Autowired
-    private SiteRepository siteRepository;
-
+    private final SiteRepository siteRepository;
     @Autowired
-    private LemmaRepository lemmaRepository;
-
+    private final LemmaRepository lemmaRepository;
     @Autowired
-    private IndexRepository indexRepository;
-
+    private final IndexRepository indexRepository;
     @Autowired
-    private PageRepository pageRepository;
+    private final PageRepository pageRepository;
 
     @Override
     public Map<String, String> indexPage(String url) throws IOException {

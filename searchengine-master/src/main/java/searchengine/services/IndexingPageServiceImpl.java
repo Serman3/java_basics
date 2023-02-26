@@ -1,8 +1,13 @@
 package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import searchengine.config.SiteConfig;
+import searchengine.config.SitesList;
+import searchengine.parsing.LemmaFinder;
 import searchengine.parsing.UtilParsing;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
@@ -11,6 +16,7 @@ import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import searchengine.services.InterfacesServices.IndexingPageService;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,23 +32,38 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
     private final IndexRepository indexRepository;
     @Autowired
     private final PageRepository pageRepository;
+    private final SitesList sitesList;
 
     @Override
     public Map<String, String> indexPage(String url) throws IOException {
-        HashMap<String, String> response = new HashMap<>();
+        HashMap<String,String> response = new HashMap<>();
 
-        if(!siteRepository.findByUrl(url).isPresent()){
+        SiteConfig siteConfig = getSiteConfig(url);
+        if (siteConfig == null){
             HashMap<String,String> map = new HashMap<>();
             map.put("result","false");
             map.put("error", "Данная страница находится за пределами сайтов, указанных в конфигурационном файле");
             return map;
         }
-        startReIndexing(url);
+
+        if (siteConfig.getUrl().equals(url)) {
+            HashMap<String,String> map = new HashMap<>();
+            reindexingAllPage(url);
+            map.put("result","true");
+            return map;
+        }
+
+        Page page = null;
+        if (pageRepository.existsByPath(url.replaceFirst(siteConfig.getUrl(), "/"))){
+            page = deleteAllPageInfoDB(url.replaceFirst(siteConfig.getUrl(), "/"));
+        }
+        reindexingOnePage(url, siteConfig, page);
+
         response.put("result","true");
         return response;
     }
 
-    public void startReIndexing(String path){
+    public void reindexingAllPage(String path){
        if (siteRepository.findByUrl(path).isPresent()){
            Site siteEntity = siteRepository.findByUrl(path).get();
            siteRepository.delete(siteRepository.getByUrl(path));
@@ -50,6 +71,71 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
        }else {
            System.out.println("Такой страницы в базе нет");
        }
+    }
+
+    public void reindexingOnePage(String path, SiteConfig siteConfig, Page page) {
+        Site site = siteRepository.findByUrl(siteConfig.getUrl()).get();
+        site.setStatus(Status.INDEXING);
+        site.setStatusTime(LocalDateTime.now());
+        siteRepository.save(site);
+        try {
+            Document document = getDocument(path);
+            page.setSite(site);
+            page.setPath(path.replaceFirst(site.getUrl(), "/"));
+            page.setCode(document.connection().response().statusCode());
+            page.setContent(document.outerHtml());
+            pageRepository.save(page);
+            transformationLemmasAndIndex(page);
+        } catch (IOException e) {
+            setStatusSiteFailed(site, e.toString());
+            throw new RuntimeException(e.getMessage());
+        }
+        System.out.println("FINISHED");
+        site.setLastError("NULL");
+        site.setStatus(Status.INDEXED);
+        siteRepository.save(site);
+    }
+
+    public void setStatusSiteFailed(Site site, String error) {
+        if (site != null){
+            site.setStatus(Status.FAILED);
+            site.setLastError(error);
+            siteRepository.save(site);
+        }
+    }
+
+    public SiteConfig getSiteConfig(String url) {
+        SiteConfig siteConfig = null;
+        for(SiteConfig site : sitesList.getSites()){
+           if(url.contains(site.getUrl())) {
+               siteConfig = site;
+              return siteConfig;
+           }
+        }
+        return siteConfig;
+    }
+
+    public Page deleteAllPageInfoDB(String pagePath) throws IOException {
+        LemmaFinder lemmaFinder = LemmaFinder.getInstance();
+        Page page = pageRepository.findByPath(pagePath).get();
+        String content = lemmaFinder.clearHTMLTags(page);
+        Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(content);
+        for(Map.Entry<String, Integer> entry : lemmaInfo.entrySet()){
+            lemmaRepository.decrementAllFrequencyBySiteIdAndLemma(page.getSite().getId(), entry.getKey());
+        }
+        indexRepository.deleteAllByPageId(page.getId());
+        return page;
+    }
+
+    public Document getDocument(String path) throws IOException {
+        return Jsoup.connect(path)
+                .ignoreContentType(true)
+                .ignoreHttpErrors(true)
+                .followRedirects(false)
+                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                .referrer("http://www.google.com")
+                .timeout(30000)
+                .get();
     }
 
 }

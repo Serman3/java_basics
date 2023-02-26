@@ -12,9 +12,12 @@ import java.util.Optional;
 
 @Repository
 public interface PageRepository extends JpaRepository<Page, Integer>, Serializable {
+
     int countAllByPath(String path);
 
     Optional<Page> findByPath(String path);
+
+    boolean existsByPath(String path);
 
     Optional<Page> findByPathAndSiteId(String path, int site_id);
 

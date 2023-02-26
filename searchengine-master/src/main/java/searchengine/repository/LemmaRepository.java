@@ -1,9 +1,11 @@
 package searchengine.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import searchengine.model.Lemma;
 import java.io.Serializable;
 import java.util.Optional;
@@ -13,6 +15,11 @@ public interface LemmaRepository extends JpaRepository<Lemma, Integer>, Serializ
     Optional<Lemma> findFirstByLemma(String lemma);
 
     Optional<Lemma> findBySiteIdAndLemma(int siteId, String lemma);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE `lemma` l SET l.frequency = l.frequency - 1 WHERE l.site_id = :siteId AND l.lemma = :lemma", nativeQuery = true)
+    void decrementAllFrequencyBySiteIdAndLemma(@Param("siteId") int siteId, @Param("lemma") String lemma);
 
     @Query(value = "SELECT COUNT(*) FROM `lemma` WHERE `site_id` =:site_id", nativeQuery = true)
     int countLemmasBySiteId(@Param("site_id") int site_id);

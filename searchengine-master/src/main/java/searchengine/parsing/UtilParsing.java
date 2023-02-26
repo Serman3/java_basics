@@ -49,8 +49,8 @@ public class UtilParsing {
             siteRepository.save(newSite);
         }
         if(isStopped()){
-            forkJoinPool.shutdownNow();
-            setStatusSiteFailed();
+            closePool(forkJoinPool);
+            setStatusAllSitesFailed();
             doStop(false);
         }
     }
@@ -83,18 +83,18 @@ public class UtilParsing {
         }
     }
 
-    public synchronized boolean isIndexing(Status status){
-        List<Site> listSites = siteRepository.findByStatus(status);
-        return !listSites.isEmpty();
-    }
-
-    public void setStatusSiteFailed(){
+    public void setStatusAllSitesFailed(){
         List<searchengine.model.Site> siteList = siteRepository.findAll();
         for (searchengine.model.Site site : siteList) {
             site.setLastError("Индексация остановлена пользователем");
             site.setStatus(Status.FAILED);
             siteRepository.save(site);
         }
+    }
+
+    public synchronized boolean isIndexing(Status status){
+        List<Site> listSites = siteRepository.findByStatus(status);
+        return !listSites.isEmpty();
     }
 
     public void doStop(boolean flag) {
@@ -104,4 +104,12 @@ public class UtilParsing {
     public boolean isStopped(){
         return doStop;
     }
+
+    public void closePool(ForkJoinPool forkJoinPool){
+        System.out.println("pool close");
+        while (!forkJoinPool.isTerminated()){
+            forkJoinPool.shutdownNow();
+        }
+    }
+
 }

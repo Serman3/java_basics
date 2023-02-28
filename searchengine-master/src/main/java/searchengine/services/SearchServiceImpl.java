@@ -1,7 +1,8 @@
 package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,19 @@ import searchengine.model.Page;
 import searchengine.model.Site;
 import searchengine.parsing.LemmaFinder;
 import searchengine.dto.NormalFormWordAndIndex;
+import searchengine.parsing.UtilParsing;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import searchengine.services.InterfacesServices.SearchService;
-import java.io.IOException;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class SearchServiceImpl implements SearchService {
+public class SearchServiceImpl extends UtilParsing implements SearchService {
 
-    private LemmaFinder lemmaFinder;
-    {
-        try {
-            lemmaFinder = new LemmaFinder(new RussianLuceneMorphology());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private final LemmaFinder lemmaFinder = getLemmaFinder();
     @Autowired
     private final SiteRepository siteRepository;
     @Autowired
@@ -45,6 +39,8 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private final PageRepository pageRepository;
     private final SitesList sites;
+    private final static Logger logger = UtilParsing.getLogger();
+    private final static Marker INFO_PARSING = UtilParsing.getInfoMarker();
 
     @Override
     public SearchResponse search(String query, String siteUrl, int offset, int limit) {
@@ -111,7 +107,7 @@ public class SearchServiceImpl implements SearchService {
         for (Page page : pages) {
             String title = getTitle(page.getContent());
             String snippet = getSnippet(page ,filteredLemmas);
-            double relativeRelevance = relativeRelevance(page.getId(), maxRelevance);
+            double relativeRelevance = getRelativeRelevance(page.getId(), maxRelevance);
             data.add(new SearchDto()
                     .setSite(site.getUrl())
                     .setSiteName(site.getName())
@@ -127,11 +123,11 @@ public class SearchServiceImpl implements SearchService {
     public String getSnippet(Page page, List<Lemma> queryLemmas) {
         String pageNormalFormContent = lemmaFinder.clearHTMLTags(page);
         String snippet = "";
-        Map<String, NormalFormWordAndIndex> pageContentLemmasAndNormalFormWordAndIndex = lemmaFinder.getEntryLemmaAndNormalFormWordAndIndex(pageNormalFormContent);
+        Map<String, NormalFormWordAndIndex> lemmaAndNormalFormWordAndIndex = lemmaFinder.getLemmaAndNormalFormWordAndIndex(pageNormalFormContent);
         for (Lemma lemmaEntity : queryLemmas) {
-            for (Map.Entry<String, NormalFormWordAndIndex> entry : pageContentLemmasAndNormalFormWordAndIndex.entrySet()){
+            for (Map.Entry<String, NormalFormWordAndIndex> entry : lemmaAndNormalFormWordAndIndex.entrySet()){
                 int indexWordInPageContent = pageNormalFormContent.indexOf(entry.getValue().getWord());
-                if(pageContentLemmasAndNormalFormWordAndIndex.containsKey(lemmaEntity.getLemma())
+                if(lemmaAndNormalFormWordAndIndex.containsKey(lemmaEntity.getLemma())
                         && entry.getKey().equals(lemmaEntity.getLemma())
                         && entry.getValue().getIndex() == indexWordInPageContent){
                     String trueForm = "<b>" + entry.getValue().getWord() + "</b>";
@@ -153,7 +149,7 @@ public class SearchServiceImpl implements SearchService {
         return document.title();
     }
 
-    public double relativeRelevance(int pageId, double maxRelevance) {
+    public double getRelativeRelevance(int pageId, double maxRelevance) {
         double absRelevance = indexRepository.absoluteRelevanceByPageId(pageId);
         return absRelevance / maxRelevance;
     }
@@ -172,7 +168,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         if(lemmaEntityList.isEmpty()){
-            System.out.println("------ТАКОЙ ЛЕММЫ НЕТ------");
+            logger.info(INFO_PARSING, "--- " + query + " THERE IS NO SUCH LEMMA ---" + "\n");
             return lemmaEntityList;
         }
 
@@ -181,7 +177,7 @@ public class SearchServiceImpl implements SearchService {
             if(lemmaRepository.percentageLemmaOnPagesById(lemma.getId()) < frequencyLimit){
                 filterFrequency.add(lemma);
             }else{
-                System.out.println("------ЛЕММА ВЫШЕ ЛИМИТА------");
+                logger.info(INFO_PARSING, "--- " + lemma.getLemma() + " LEMMA IS ABOVE THE LIMIT ---" + "\n");
             }
         }
         return filterFrequency.stream().sorted(Comparator.comparing(Lemma::getFrequency)).toList();

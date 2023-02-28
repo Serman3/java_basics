@@ -16,6 +16,8 @@ public interface LemmaRepository extends JpaRepository<Lemma, Integer>, Serializ
 
     Optional<Lemma> findBySiteIdAndLemma(int siteId, String lemma);
 
+    boolean existsBySiteIdAndLemma(int siteId, String lemma);
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE `lemma` l SET l.frequency = l.frequency - 1 WHERE l.site_id = :siteId AND l.lemma = :lemma", nativeQuery = true)

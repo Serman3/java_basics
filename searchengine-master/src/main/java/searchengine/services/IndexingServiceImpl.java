@@ -7,8 +7,6 @@ import searchengine.config.SiteConfig;
 import searchengine.config.SitesList;
 import searchengine.parsing.UtilParsing;
 import searchengine.model.Status;
-import searchengine.repository.IndexRepository;
-import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 import searchengine.services.InterfacesServices.IndexingService;
@@ -24,10 +22,6 @@ public class IndexingServiceImpl extends UtilParsing implements IndexingService 
     private final SiteRepository siteRepository;
     @Autowired
     private final PageRepository pageRepository;
-    @Autowired
-    private final LemmaRepository lemmaRepository;
-    @Autowired
-    private final IndexRepository indexRepository;
     private static final int CORE = Runtime.getRuntime().availableProcessors();
 
     @Override
@@ -52,7 +46,7 @@ public class IndexingServiceImpl extends UtilParsing implements IndexingService 
                         new Runnable() {
                     @Override
                     public void run() {
-                       startIndexing(site.getUrl(), site.getName());
+                       startIndexing(site.getUrl(), site.getName(), new ForkJoinPool());
                     }
                 });
             }
@@ -73,7 +67,7 @@ public class IndexingServiceImpl extends UtilParsing implements IndexingService 
             map.put("error", "Индексация не запущена");
             return map;
         }
-        doStop(true);
+        UtilParsing.doStop(true);
         response.put("result", "true");
         return response;
     }

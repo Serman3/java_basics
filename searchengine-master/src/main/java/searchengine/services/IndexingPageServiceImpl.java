@@ -1,6 +1,8 @@
 package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +36,12 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
     @Autowired
     private final PageRepository pageRepository;
     private final SitesList sitesList;
+    private final static Logger logger = UtilParsing.getLogger();
+    private final static Marker INFO_PARSING = UtilParsing.getInfoMarker();
+    private final static Marker ERROR_PARSING = UtilParsing.getErrorMarker();
 
     @Override
-    public Map<String, String> indexPage(String url) throws IOException {
+    public Map<String, String> indexPage(String url) {
         HashMap<String,String> response = new HashMap<>();
 
         SiteConfig siteConfig = getSiteConfig(url);
@@ -45,17 +51,15 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
             map.put("error", "Данная страница находится за пределами сайтов, указанных в конфигурационном файле");
             return map;
         }
-
         if (siteConfig.getUrl().equals(url)) {
             HashMap<String,String> map = new HashMap<>();
             reindexingAllPage(url);
             map.put("result","true");
             return map;
         }
-
         Page page = null;
         if (pageRepository.existsByPath(url.replaceFirst(siteConfig.getUrl(), "/"))){
-            page = deleteAllPageInfoDB(url.replaceFirst(siteConfig.getUrl(), "/"));
+            page = deleteAllInfoFromPage(url.replaceFirst(siteConfig.getUrl(), "/"));
         }
         reindexingOnePage(url, siteConfig, page);
 
@@ -67,9 +71,9 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
        if (siteRepository.findByUrl(path).isPresent()){
            Site siteEntity = siteRepository.findByUrl(path).get();
            siteRepository.delete(siteRepository.getByUrl(path));
-           startIndexing(path, siteEntity.getName());
+           startIndexing(path, siteEntity.getName(), new ForkJoinPool());
        }else {
-           System.out.println("Такой страницы в базе нет");
+           logger.info(INFO_PARSING, "--- Такой страницы " + path + " в базе нет ---" + "\n");
        }
     }
 
@@ -85,23 +89,23 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
             page.setCode(document.connection().response().statusCode());
             page.setContent(document.outerHtml());
             pageRepository.save(page);
-            transformationLemmasAndIndex(page);
+            saveLemmaAndIndex(page);
         } catch (IOException e) {
+            logger.error(ERROR_PARSING, e.getMessage() + "\n");
             setStatusSiteFailed(site, e.toString());
             throw new RuntimeException(e.getMessage());
         }
-        System.out.println("FINISHED");
+
+        logger.info("--- " + Thread.currentThread().getName() + " reindexing one page " + path + " FINISHED ---" + "\n");
         site.setLastError("NULL");
         site.setStatus(Status.INDEXED);
         siteRepository.save(site);
     }
 
     public void setStatusSiteFailed(Site site, String error) {
-        if (site != null){
-            site.setStatus(Status.FAILED);
-            site.setLastError(error);
-            siteRepository.save(site);
-        }
+        site.setStatus(Status.FAILED);
+        site.setLastError(error);
+        siteRepository.save(site);
     }
 
     public SiteConfig getSiteConfig(String url) {
@@ -115,11 +119,10 @@ public class IndexingPageServiceImpl extends UtilParsing implements IndexingPage
         return siteConfig;
     }
 
-    public Page deleteAllPageInfoDB(String pagePath) throws IOException {
-        LemmaFinder lemmaFinder = LemmaFinder.getInstance();
+    public Page deleteAllInfoFromPage(String pagePath) {
+        LemmaFinder lemmaFinder = getLemmaFinder();
         Page page = pageRepository.findByPath(pagePath).get();
-        String content = lemmaFinder.clearHTMLTags(page);
-        Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(content);
+        Map<String,Integer> lemmaInfo = lemmaFinder.collectLemmas(page.getContent());
         for(Map.Entry<String, Integer> entry : lemmaInfo.entrySet()){
             lemmaRepository.decrementAllFrequencyBySiteIdAndLemma(page.getSite().getId(), entry.getKey());
         }

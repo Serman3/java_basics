@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "page", uniqueConstraints = { @UniqueConstraint(name = "UniqueSite_idAndPath", columnNames = { "site_id", "path" } ) })
-@SQLInsert(sql = "INSERT INTO page (code, content, path, site_id) VALUES (?,?,?,?) as new(a,b,c,d) ON DUPLICATE KEY UPDATE content = new.b, code = new.a")
+//@SQLInsert(sql = "INSERT INTO page (code, content, path, site_id) VALUES (?,?,?,?) as new(a,b,c,d) ON DUPLICATE KEY UPDATE content = new.b, code = new.a")
 public class Page {
 
     @Id

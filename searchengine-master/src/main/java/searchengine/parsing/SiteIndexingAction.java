@@ -1,6 +1,8 @@
 package searchengine.parsing;
 
 import com.sun.istack.NotNull;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,17 +20,19 @@ import static java.lang.Thread.sleep;
 
 public class SiteIndexingAction extends RecursiveTask<Set<String>> {
 
-    private String url;
-    private String rootUrl;
-    private Site site;
+    private final String url;
+    private final String rootUrl;
+    private final Site site;
     @Autowired
-    private PageRepository pageRepository;
+    private final PageRepository pageRepository;
     @Autowired
-    private SiteRepository siteRepository;
-    private UtilParsing utilParsing;
+    private final SiteRepository siteRepository;
+    private final UtilParsing utilParsing;
+    private final static Logger logger = UtilParsing.getLogger();
+    private final static Marker INFO_PARSING = UtilParsing.getInfoMarker();
+    private final static Marker ERROR_PARSING = UtilParsing.getErrorMarker();
     private static volatile Set<String> allLinks = Collections.synchronizedSet(new HashSet<>());
-    //private static final String URL_IS_FILE = "http[s]?:/(?:/[^/]+){1,}/[А-Яа-яёЁ\\w ]+\\.[a-z]{3,5}(?![/]|[\\wА-Яа-яёЁ])";
-    private static final String URL_IS_FILE = "(\\S+(\\.(?i)(jpg|jpeg|JPG|png|gif|bmp|pdf|xml))$)";
+    private final static  String URL_IS_FILE = "(\\S+(\\.(?i)(jpg|jpeg|JPG|png|gif|bmp|pdf|xml))$)";
 
     public SiteIndexingAction(String rootUrl, Site site, PageRepository pageRepository, SiteRepository siteRepository, UtilParsing utilParsing){
         this.url = rootUrl;
@@ -54,11 +58,13 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
         Set<String> links = getLinks(url);
         ArrayList<SiteIndexingAction> taskList = new ArrayList<>();
         for (String link : links) {
+            if (stopped()) break;
             SiteIndexingAction task = new SiteIndexingAction(link, site, rootUrl, pageRepository, siteRepository, utilParsing);
             task.fork();
             taskList.add(task);
         }
         for (SiteIndexingAction task : taskList){
+            if (stopped()) break;
             links.addAll(task.join());
         }
         return links;
@@ -73,37 +79,27 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
             sleep(150);
             try {
                 response = connection.execute();
-            } catch (Exception exception){
-                exception.printStackTrace();
+            } catch (Exception e){
+                logger.error(ERROR_PARSING, e.getMessage() + "\n");
             }
             if (response != null) {
                 document = response.parse();
                 Elements elements = document.select("a[href]");
                 for (Element element : elements) {
                     String absUrl = element.absUrl("href");
-                    if (isCorrectUrl(absUrl)) {
-                        System.out.println("-- " + Thread.currentThread().getName() + " got correct abs:href " + absUrl);
-                        if (stopped()) {
-                            System.out.println("STOPPED");
-                            break;
-                        }
-                        Page page = savePage(site, absUrl.replaceFirst(rootUrl, "/"), response.statusCode(), document.outerHtml());
-                        if(page != null){
-                            utilParsing.transformationLemmasAndIndex(page);
-                        }
-                        site.setStatusTime(LocalDateTime.now());
-                        siteRepository.save(site);
-                        System.out.println("---- add to set" + site.getUrl() + " " + site.getName() + " " + site.getStatus());
-                        allLinks.add(absUrl);
-                        resultList.add(absUrl);
-                        if (stopped()) {
-                            break;
-                        }
-                    }
+                    if (!isCorrectUrl(absUrl)) continue;
+                    logger.info(INFO_PARSING,"--- " + Thread.currentThread().getName() + " got correct abs:href " + absUrl + " ---");
+                    if (stopped()) break;
+                    savePageAndLemmaAndIndex(site, absUrl.replaceFirst(rootUrl, "/"), response.statusCode(), document.outerHtml());
+                    setStatusTimeSite(site);
+                    logger.info(INFO_PARSING,"--- add to set " + site.getUrl() + " " + site.getName() + " " + site.getStatus() + " ---");
+                    allLinks.add(absUrl);
+                    resultList.add(absUrl);
+                    if (stopped()) break;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(ERROR_PARSING, e.getMessage() + "\n");
         }
         return resultList;
     }
@@ -118,13 +114,12 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
                 && !url.contains("?");
     }
 
-    public synchronized Page savePage(Site site, String path, int statusCode, String content){
-        Page page = null;
+    public synchronized void savePageAndLemmaAndIndex(Site site, String path, int statusCode, String content){
         if(!pageRepository.findByPathAndSiteId(path.replaceFirst(rootUrl, "/"), site.getId()).isPresent()) {
-            page = new Page(site, path, statusCode, content);
+            Page page = new Page(site, path, statusCode, content);
             pageRepository.save(page);
+            utilParsing.saveLemmaAndIndex(page);
         }
-        return page;
     }
 
     public Connection getConnection(String url){
@@ -138,11 +133,17 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
         return connection;
     }
 
+    public void setStatusTimeSite(Site site){
+        site.setStatusTime(LocalDateTime.now());
+        siteRepository.save(site);
+    }
+
     public boolean linkIsFile(@NotNull String link) {
         return link.matches(URL_IS_FILE);
     }
 
     public boolean stopped(){
-        return utilParsing.isStopped();
+        return UtilParsing.isStopped();
     }
+
 }

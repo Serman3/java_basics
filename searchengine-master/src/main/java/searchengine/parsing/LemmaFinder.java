@@ -6,7 +6,6 @@ import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.safety.Safelist;
 import searchengine.dto.NormalFormWordAndIndex;
 import searchengine.model.Page;
 import java.io.IOException;
@@ -51,22 +50,13 @@ public class LemmaFinder {
         HashMap<String, Integer> lemmas = new HashMap<>();
 
         for (String word : words) {
-            if (word.isBlank()) {
-                continue;
-            }
-
+            if (word.isBlank()) continue;
             List<String> wordBaseForms = luceneMorphology.getMorphInfo(word);
-            if (anyWordBaseBelongToParticle(wordBaseForms)) {
-                continue;
-            }
-
+            if (anyWordBaseBelongToParticle(wordBaseForms)) continue;
             List<String> normalForms = luceneMorphology.getNormalForms(word);
-            if (normalForms.isEmpty()) {
-                continue;
-            }
-
+            if (normalForms.isEmpty()) continue;
+            if (word.length() < 3) continue;
             String normalWord = normalForms.get(0);
-
             if (lemmas.containsKey(normalWord)) {
                 lemmas.put(normalWord, lemmas.get(normalWord) + 1);
             } else {
@@ -76,24 +66,16 @@ public class LemmaFinder {
         return lemmas;
     }
 
-    public Map<String, NormalFormWordAndIndex> getEntryLemmaAndNormalFormWordAndIndex(String text){
+    public Map<String, NormalFormWordAndIndex> getLemmaAndNormalFormWordAndIndex(String text){
         String[] words = arrayContainsRussianWords(text);
         Map<String,NormalFormWordAndIndex> result = new HashMap<>();
         for (String word : words) {
-            if (word.isBlank()) {
-                continue;
-            }
-
+            if (word.isBlank()) continue;
             List<String> wordBaseForms = luceneMorphology.getMorphInfo(word);
-            if (anyWordBaseBelongToParticle(wordBaseForms)) {
-                continue;
-            }
-
+            if (anyWordBaseBelongToParticle(wordBaseForms)) continue;
             List<String> normalForms = luceneMorphology.getNormalForms(word);
-            if (normalForms.isEmpty()) {
-                continue;
-            }
-
+            if (normalForms.isEmpty()) continue;
+            if (word.length() < 3) continue;
             String normalWord = normalForms.get(0);
             int indexWord = text.indexOf(word);
             if (indexWord != -1) {

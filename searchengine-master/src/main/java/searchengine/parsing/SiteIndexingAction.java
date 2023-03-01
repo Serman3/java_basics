@@ -1,6 +1,5 @@
 package searchengine.parsing;
 
-import com.sun.istack.NotNull;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.jsoup.Connection;
@@ -9,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import searchengine.model.Page;
 import searchengine.model.Site;
 import searchengine.repository.PageRepository;
@@ -138,7 +138,7 @@ public class SiteIndexingAction extends RecursiveTask<Set<String>> {
         siteRepository.save(site);
     }
 
-    public boolean linkIsFile(@NotNull String link) {
+    public boolean linkIsFile(String link) {
         return link.matches(URL_IS_FILE);
     }
 

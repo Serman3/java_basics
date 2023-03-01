@@ -1,14 +1,12 @@
 package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import searchengine.config.SitesList;
 import searchengine.dto.statistics.*;
 import searchengine.model.Site;
 import searchengine.model.Status;
 import searchengine.parsing.UtilParsing;
-import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
@@ -22,14 +20,9 @@ import java.util.List;
 public class StatisticsServiceImpl extends UtilParsing implements StatisticsService {
 
     private final SitesList sites;
-    @Autowired
-    private SiteRepository siteRepository;
-    @Autowired
-    private LemmaRepository lemmaRepository;
-    @Autowired
-    private IndexRepository indexRepository;
-    @Autowired
-    private PageRepository pageRepository;
+    private final SiteRepository siteRepository;
+    private final LemmaRepository lemmaRepository;
+    private final PageRepository pageRepository;
 
     @Override
     public StatisticsResponse getStatistics() {

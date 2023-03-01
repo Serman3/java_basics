@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 
 @RequiredArgsConstructor
+@Component
 public class UtilParsing {
 
     @Autowired
